@@ -32,6 +32,17 @@ were excluded as out of scope.
     \end{tabular}
 \end{table}
 
+This 6-class formulation was used for the Full and Compact architecture
+designs described below (Section~\ref{subsec:model-evolution}). During
+training and evaluation of the deployed Tiny architecture, the Tree Falling
+class was dropped: its low-frequency crack/creak signature overlapped
+heavily with background forest noise and its removal improved the
+reliability of the remaining classes. The final Tiny model is therefore
+trained and evaluated on five classes -- Axe, Chainsaw, Gunshot, Handsaw,
+and Background -- and all classification results reported in
+Section~\ref{subsec:training-pipeline} and Section~\ref{sec:acoustic-results}
+reflect this 5-class configuration.
+
 \subsection{Acoustic Feature Extraction}
 
 Raw 16~kHz audio is converted to a log-Mel spectrogram via a Hann window,

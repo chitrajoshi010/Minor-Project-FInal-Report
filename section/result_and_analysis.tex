@@ -109,17 +109,20 @@ Web Dashboard & Future Work\\
 
 
 \section{Acoustic Threat Detection Results}
+\label{sec:acoustic-results}
 
-The deployed \texttt{tiny\_int8.tflite} model was evaluated on the held-out
-FSC22 test split (240 samples, stratified across the 6 project classes). The
-model achieved an overall accuracy of \textbf{87.92\%} (211/240 correct) and
-a micro-averaged AUC-ROC of \textbf{0.9811}, exceeding the full model's
-INT8 accuracy of 86.67\% despite using roughly 7$\times$ fewer parameters
-(Section~\ref{subsec:model-evolution}).
+The deployed \texttt{model\_int8.tflite} model was evaluated on the held-out
+FSC22 test split (225 samples, stratified across the 5 project classes
+described in Section~\ref{subsec:model-evolution}). The model achieved an
+overall accuracy of \textbf{88.89\%} (200/225 correct), a balanced accuracy
+of \textbf{82.42\%}, and a micro-averaged AUC-ROC of \textbf{0.9838},
+confirming that the Tiny architecture -- the only variant small enough to
+fit the ESP32-S3's memory budget (Table~\ref{tab:model-evolution}) --
+remains highly discriminative despite its reduced parameter count.
 
 Table~\ref{tab:classification-report} reports precision, recall, and
 F1-score per class. Background -- the majority class with 165 test samples
--- is classified with very high precision and recall (0.9398 / 0.9455),
+-- is classified with very high precision and recall (0.9620 / 0.9212),
 which is the desired behaviour for a safety-critical detector, since false
 positives on background would generate nuisance alerts.
 
@@ -131,28 +134,26 @@ positives on background would generate nuisance alerts.
         \toprule
         \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
         \midrule
-        axe          & 0.7692 & 0.6667 & 0.7143 & 15 \\
-        background   & 0.9398 & 0.9455 & 0.9426 & 165 \\
-        chainsaw     & 0.8462 & 0.7333 & 0.7857 & 15 \\
-        gunshot      & 0.6500 & 0.8667 & 0.7429 & 15 \\
-        handsaw      & 1.0000 & 0.8000 & 0.8889 & 15 \\
-        tree\_falling & 0.5625 & 0.6000 & 0.5806 & 15 \\
+        axe          & 0.5789 & 0.7333 & 0.6471 & 15 \\
+        chainsaw     & 0.8571 & 0.8000 & 0.8276 & 15 \\
+        gunshot      & 0.6842 & 0.8667 & 0.7647 & 15 \\
+        handsaw      & 0.8000 & 0.8000 & 0.8000 & 15 \\
+        background   & 0.9620 & 0.9212 & 0.9412 & 165 \\
         \midrule
-        \textbf{Accuracy} & \multicolumn{3}{c}{0.8792} & 240 \\
-        Macro avg    & 0.7946 & 0.7687 & 0.7758 & 240 \\
-        Weighted avg & 0.8853 & 0.8792 & 0.8801 & 240 \\
+        \textbf{Accuracy} & \multicolumn{3}{c}{0.8889} & 225 \\
+        Macro avg    & 0.7765 & 0.8242 & 0.7961 & 225 \\
+        Weighted avg & 0.9002 & 0.8889 & 0.8928 & 225 \\
         \bottomrule
     \end{tabular}
 \end{table}
 
 Figure~\ref{fig:prf-chart} visualises the same precision, recall, and
 F1-score values, making the weaker classes easier to spot at a glance:
-handsaw's recall gap (1.000 precision vs.\ 0.800 recall), gunshot's
-precision gap (0.650 precision vs.\ 0.867 recall) -- suggesting the model
-is currently biased toward flagging ambiguous impulsive sounds as gunshots
-rather than missing them, an acceptable trade-off for a security
-application -- and tree\_falling's overall weakness across all three
-metrics.
+axe has the lowest precision (0.5789 vs.\ 0.7333 recall), and gunshot shows
+a similar precision gap (0.6842 precision vs.\ 0.8667 recall) -- suggesting
+the model is currently biased toward flagging ambiguous impulsive sounds as
+axe or gunshot strikes rather than missing them, an acceptable trade-off for
+a security application.
 
 \begin{figure}[H]
     \centering
@@ -163,12 +164,14 @@ metrics.
 \end{figure}
 
 Figure~\ref{fig:confusion-matrix} shows the confusion matrix underlying
-these scores. Tree falling's weak F1-score (0.5806) is driven mainly by
-confusion with background: five of fifteen tree-falling clips were
-misclassified as background, plausibly because the low-frequency
-crack/creak signature of a falling tree overlaps with wind and ambient
-forest noise, and because tree falling has the smallest test support (15
-samples) of any class.
+these scores. Axe's precision gap is driven mainly by confusion with
+background: three of fifteen axe clips were misclassified as background,
+plausibly because the sharp broadband impact of an axe strike is brief and
+can be masked by ambient forest noise once averaged over the 2.5~s window;
+conversely, five background clips were misclassified as axe, and four as
+gunshot, reflecting the acoustic overlap between short, impulsive
+background events (e.g.\ falling debris, distant cracks) and the transient
+signatures of the threat classes.
 
 \begin{figure}[H]
     \centering
@@ -178,8 +181,8 @@ samples) of any class.
 \end{figure}
 
 Despite this per-class variation, the model separates every class from the
-rest well in ranking terms, achieving a micro-averaged AUC-ROC of 0.9811 and
-a per-class one-vs-rest AUC no lower than 0.9384 (gunshot) -- indicating
+rest well in ranking terms, achieving a micro-averaged AUC-ROC of 0.9838 and
+a per-class one-vs-rest AUC no lower than 0.9370 (gunshot) -- indicating
 that the confidence threshold, rather than the model's underlying
 discriminative power, is the primary lever for improving the weaker classes
 before final deployment.
