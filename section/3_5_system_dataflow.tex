@@ -2,7 +2,76 @@
 %  section/3_5_system_dataflow.tex -- Section 3.5: System Data Flow
 %  and Section 3.6: Overall Working Principle
 % ============================================================================
-\section{System Data Flow}
+\section{System Data Flow and ns-3 Simulation Configuration}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{system_dataflow.png}
+    \caption{Proposed System Dataflow}
+    \label{fig:placeholder}
+\end{figure}
+
+\section{ns-3 Simulation Setup}
+The ns-3 simulation environment is configured to evaluate the proposed forest monitoring network using the LDSE multi-hop routing protocol and LoRaWAN single-hop baseline. The simulation setup includes:
+
+\subsection{Network Topology}
+- Gateway node positioned at the center of a 1--5 km$^2$ forest grid
+- Sensor nodes distributed randomly across the grid (20, 50, 100 node densities tested)
+- Node distances from gateway: 500 m, 1 km, 2 km, 3 km scenarios
+- Multi-hop relay chain formation via LDSE layer assignment protocol
+
+\subsection{Channel Model}
+- Log-distance path loss model with frequency-dependent exponent for sub-GHz ISM bands
+- Foliage attenuation factor: 0.01--0.05 dB/m (forest density dependent)
+- Log-normal shadowing: $\sigma$ = 4--8 dB (tree canopy effects)
+- Multipath: Rayleigh fading component for non-line-of-sight conditions
+- Comparison with ITU-R P.525-15 radio propagation model for forest environments
+
+\subsection{LDSE Protocol Parameters}
+- Layer assignment: auto-increment from gateway beacon (Layer 0 $\rightarrow$ Layer 1 $\rightarrow$ ...)
+- Time slot duration: 100 ms (configurable per scenario)
+- Synchronisation window: 20 ms at start of each epoch
+- Data transmission window: 80 ms divided TDMA by layer
+- Deep-sleep period: between epochs (nodes in ultra-low-leakage $\sim$7 $\mu$A state)
+- Guard interval: 20--50 ms at slot edges (clock drift compensation from temperature variation)
+- Parent selection score: $\alpha \cdot RSSI_{link} + \beta \cdot (1 - E_{consumed}/E_{initial})$
+
+\subsection{LoRaWAN Single-Hop Baseline Parameters}
+- Spreading factor assignment: adaptive based on distance (SF7 near gateway, SF12 at cell edge)
+- Bandwidth: 125 kHz (default sub-GHz ISM band)
+- Coding rate: 4/5
+- Transmission power: 14 dBm
+- Adaptive Data Rate (ADR) enabled for single-hop optimization
+- ALOHA-based contention (no TDMA scheduling)
+
+\subsection{Simulation Parameters}
+- Simulation duration: 1000 seconds per scenario
+- Packet size: 10 bytes (sensor data) + 50 bytes (alert payload)
+- Data rates: SF7 = 54.7 kbps to SF12 = 300 bps
+- Transmission power: 14 dBm (default)
+- Receive sensitivity: -137 dBm (SF7) to -148 dBm (SF12)
+- Number of runs: 30 per scenario (statistical averaging with 95\% confidence intervals)
+
+\subsection{Metrics Extracted}
+- Packet Delivery Ratio (PDR): percentage of generated packets successfully reaching the gateway
+- End-to-End Latency: time taken from packet generation at source to reception at gateway
+- Energy Consumption: average energy drain per node per hour (transmission + reception + sleep)
+- Number of Hops: average route length for multi-hop LDSE scenarios
+- Duty Cycle Compliance: percentage of time channel occupied per node (LoRaWAN regional compliance)
+- Collision Rate: packet collisions at relay nodes and gateway
+
+\section{Overall Working Principle}
+The network operates in a closed-loop, event-driven manner. Scheduled
+environmental sampling provides background fire-risk monitoring, while
+interrupt-driven acoustic wake-up enables immediate response to chainsaw,
+gunshot, or axe sounds. Edge inference before transmission ensures that only
+confirmed threat events generate network traffic, significantly reducing
+energy consumption compared to systems that stream raw sensor data
+continuously. LDSE synchronized sleep--relay cycles ensure that relay nodes
+are awake to forward packets precisely when needed, while remaining in deep
+sleep otherwise. The gateway publishes structured alerts to the web dashboard
+in real time, enabling forest rangers to identify the location and nature of
+each detected event and respond accordingly.
 
 \begin{figure}[htbp]
     \centering

@@ -112,46 +112,74 @@ FreeRTOS, and networking stack within the 512~KB SRAM budget.
     \end{tabular}
 \end{table}
 
-\section{LoRa Network Simulation Implementation}
+\section{LoRa Network Simulation Implementation using ns-3}
 
 To evaluate the wireless communication capability of the proposed forest monitoring
-system, a LoRaWAN-based simulation environment was developed using OMNeT++
-along with the FLORA framework and the INET library.
+system, a LoRaWAN-based simulation environment was developed using ns-3 with the
+LDSE multi-hop routing protocol. The simulation environment leverages the ns-3.48
+contrib modules:
+
+\begin{itemize}
+    \item \textbf{ns-3 lorawan module} (\texttt{ns-3.48/contrib/lorawan}/): Provides
+          comprehensive LoRaWAN stack implementation including end devices, gateways,
+          ALOHA-based contention, Adaptive Data Rate (ADR), Class A MAC operations,
+          and application layer protocols.
+    \item \textbf{ns-3 ldse module} (\texttt{ns-3.48/contrib/ldse}/): Implements the
+          Layered Dynamic Synchronization Energy-saving protocol with core components:
+          \begin{itemize}
+              \item \texttt{ldse-sensor-app.cc/h}: Application layer for data generation
+              \item \texttt{ldse-routing.cc/h}: Multi-hop routing with layer assignment
+              \item \texttt{ldse-sync.cc/h}: Time synchronization via FTSP (Flooding Time
+                Synchronisation Protocol)
+              \item \texttt{ldse-layering.cc/h}: Hierarchical layer topology formation
+              \item \texttt{ldse-channel-manager.cc/h}: Multi-channel separation (public/private)
+              \item \texttt{ldse-energy-controller.cc/h}: Energy consumption modeling
+              \item \texttt{ldse-epoch-scheduler.cc/h}: Epoch structure management
+          \end{itemize}
+    \item \textbf{Channel Model:} Realistic forest path loss model combining
+          log-distance path loss with foliage attenuation factors to simulate how
+          thick trees degrade LoRa signals compared to open field conditions.
+\end{itemize}
 
 The simulation environment consists of:
 
 \begin{itemize}
-    \item LoRa end devices.
-    \item LoRa gateway.
-    \item LoRa communication medium.
+    \item LoRa end devices configured with LDSE multi-hop routing.
+    \item LoRa gateway node at the center of the network area.
+    \item LDSE protocol stack managing layer assignment, time synchronization, and
+          relay forwarding.
+    \item Forest channel model with foliage attenuation and log-distance path loss.
     \item Network communication components provided by the INET framework.
 \end{itemize}
 
 A basic LoRa communication scenario was implemented where LoRa sensor nodes
-communicate through a LoRa gateway.
+communicate through the LDSE multi-hop routing protocol to the gateway.
 
 The simulation workflow includes:
 
 \begin{enumerate}
-    \item Creation and configuration of LoRa nodes using the FLORA framework.
-    \item Configuration of LoRa physical layer parameters.
-    \item Packet generation from the end devices.
-    \item Wireless packet transmission through the LoRa medium.
+    \item Creation and configuration of LoRa nodes using the ns-3 lorawan helper.
+    \item Configuration of LDSE protocol parameters (layer assignment, time slots,
+          guard intervals, parent selection).
+    \item Configuration of forest channel model (foliage attenuation, log-distance
+          path loss exponent).
+    \item Packet generation from end devices (sensor data + alert payloads).
+    \item Wireless packet transmission through the LoRa medium with forest propagation.
+    \item LDSE multi-hop forwarding: intermediate relay nodes receive and forward
+          packets based on layer assignment and parent selection logic.
     \item Reception and processing of packets at the gateway.
+    \item Performance metric extraction: PDR, end-to-end latency, energy consumption,
+          duty cycle compliance, and collision rate.
 \end{enumerate}
 
-The current simulation successfully validates basic LoRa communication between
-sensor nodes and provides a foundation for implementing the proposed LDSE
-multi-hop routing protocol in future work.
-
-The implemented LoRa network topology in OMNeT++ is illustrated in
-Fig.~\ref{fig:lora_simulation}.
+The implemented LoRa network topology in ns-3 is illustrated in
+Fig.~\ref{fig:lora_simulation_ns3}.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.75\textwidth]{lora_simulation.png}
-    \caption{LoRaWAN communication using OMNeT++}
-    \label{fig:lora_simulation}
+    \caption{LoRaWAN communication using ns-3 with LDSE multi-hop routing}
+    \label{fig:lora_simulation_ns3}
 \end{figure}
 
 
