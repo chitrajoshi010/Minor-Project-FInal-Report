@@ -6,17 +6,18 @@
 \contentsline {figure}{\numberline {4-2}{\ignorespaces LDSE protocol network hierarchy}}{19}{figure.caption.11}%
 \contentsline {figure}{\numberline {4-3}{\ignorespaces LDSE Protocol Epoch Structure}}{20}{figure.caption.12}%
 \contentsline {figure}{\numberline {4-4}{\ignorespaces Sequential Synchronization and Operational Flowchart}}{22}{figure.caption.13}%
-\contentsline {figure}{\numberline {4-5}{\ignorespaces On-device acoustic inference pipeline}}{27}{figure.caption.16}%
-\contentsline {figure}{\numberline {4-6}{\ignorespaces Proposed System Dataflow}}{29}{figure.caption.17}%
+\contentsline {figure}{\numberline {4-5}{\ignorespaces Block diagram of the deployed Tiny CNN, showing the three convolutional blocks and the classification head}}{27}{figure.caption.17}%
+\contentsline {figure}{\numberline {4-6}{\ignorespaces On-device acoustic inference pipeline}}{29}{figure.caption.18}%
+\contentsline {figure}{\numberline {4-7}{\ignorespaces Proposed System Dataflow}}{31}{figure.caption.19}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5-1}{\ignorespaces Log-Mel spectrograms for representative classes}}{32}{figure.caption.18}%
-\contentsline {figure}{\numberline {5-2}{\ignorespaces LoRaWAN communication using OMNeT++}}{35}{figure.caption.21}%
-\contentsline {figure}{\numberline {5-3}{\ignorespaces LoRa communication between two LoRa end devices in OMNeT++}}{36}{figure.caption.22}%
+\contentsline {figure}{\numberline {5-1}{\ignorespaces Log-Mel spectrograms for representative classes}}{34}{figure.caption.20}%
+\contentsline {figure}{\numberline {5-2}{\ignorespaces LoRaWAN communication using OMNeT++}}{37}{figure.caption.23}%
+\contentsline {figure}{\numberline {5-3}{\ignorespaces LoRa communication between two LoRa end devices in OMNeT++}}{38}{figure.caption.24}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6-1}{\ignorespaces Per-class precision, recall, and F1-score for the deployed tiny model}}{40}{figure.caption.26}%
-\contentsline {figure}{\numberline {6-2}{\ignorespaces Confusion matrix for the deployed tiny INT8 model)}}{41}{figure.caption.27}%
+\contentsline {figure}{\numberline {6-1}{\ignorespaces Per-class precision, recall, and F1-score for the deployed tiny model}}{42}{figure.caption.28}%
+\contentsline {figure}{\numberline {6-2}{\ignorespaces Confusion matrix for the deployed tiny INT8 model)}}{43}{figure.caption.29}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {9-1}{\ignorespaces Schematic diagram of the sensing layer.}}{49}{figure.caption.38}%
+\contentsline {figure}{\numberline {9-1}{\ignorespaces Schematic diagram of the sensing layer.}}{51}{figure.caption.40}%
 \contentsfinish 

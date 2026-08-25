@@ -42,7 +42,9 @@ an axe strike.
 \ref{subsec:model-evolution}) were trained using categorical cross-entropy
 loss with the Adam optimizer. The final deployed (tiny) variant uses
 \texttt{GlobalAveragePooling2D} in place of a flattened dense layer, avoiding
-an oversized fully-connected weight matrix.
+an oversized fully-connected weight matrix; its full layer-by-layer
+architecture and block diagram are detailed in
+Section~\ref{subsec:cnn-architecture}.
 
 \subsection{INT8 Quantization}
 \label{subsec:quantization-impl}
