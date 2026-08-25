@@ -4,6 +4,7 @@
 \section{Acoustic Threat Detection Implementation}
 
 \subsection{Training Pipeline}
+\label{subsec:training-pipeline}
 
 The acoustic model development pipeline was implemented independently in
 Python using TensorFlow/Keras, rather than the Edge Impulse platform
@@ -12,24 +13,23 @@ architecture search described in Section~\ref{subsec:model-evolution}, and
 quantization -- control that proved necessary once memory profiling on
 target hardware revealed how extensively the model had to be redesigned.
 
-\textbf{Data Preparation:} The 6-class audio subset was split using a
+\textbf{Data Preparation:} The 5-class audio subset was split using a
 stratified 80/20 train-test split per class (\texttt{split\_dataset.py}),
 computed on the original, unaugmented files to keep the test set clean.
 Augmentation (\texttt{augment\_training.py}) -- pitch shifting, time
-stretching, and additive noise injection -- was applied only to the five
-threat classes (axe, chainsaw, gunshot, handsaw, tree falling) and
-deliberately withheld from the background class, so that augmentation does
-not make background clips sound more threat-like. This expanded the
-augmented training set to roughly 360 files per threat class and 544 files
-for background.
+stretching, and additive noise injection -- was applied only to the four
+threat classes (axe, chainsaw, gunshot, handsaw) and deliberately withheld
+from the background class, so that augmentation does not make background
+clips sound more threat-like. This expanded the augmented training set to
+roughly 360 files per threat class and 544 files for background.
 
 \textbf{Feature Extraction:} Raw 16~kHz audio was converted to a log-Mel
 spectrogram using a Hann window, 512-point FFT, and a Mel filterbank,
 followed by per-frame normalisation (mean subtraction, unit standard
 deviation). Figure~\ref{fig:example_spectrograms} shows example spectrograms
 for representative classes, illustrating the harmonic bands of chainsaw
-noise, the sharp broadband transient of a gunshot, and the impulsive
-low-frequency signature of a tree-falling event.
+noise, the sharp broadband transient of a gunshot, and the impact profile of
+an axe strike.
 
 \begin{figure}[H]
     \centering
@@ -62,12 +62,13 @@ converter.representative_dataset = representative_dataset
 \end{verbatim}
 
 A representative dataset of 100 randomly sampled training clips was used to
-calibrate activation quantization ranges. For the deployed tiny model,
-calibration produced an input scale of 0.053753 with zero-point 17 (mapping
-the INT8 range $[-128, 127]$ to approximately $[-2.3, 5.8]$ in the
-normalised float domain), and an output scale of 0.003906 with zero-point
-$-128$ for dequantizing softmax probabilities. This reduced the tiny model
-to a 19~KB INT8 TFLite file, compiled into a C header
+calibrate activation quantization ranges. For the final deployed tiny model
+(retrained on the 5-class dataset), calibration produced an input scale of
+0.076175 with zero-point $-13$ (mapping the INT8 range $[-128, 127]$ to
+approximately $[-8.8, 10.7]$ in the normalised float domain), and an output
+scale of 0.003906 with zero-point $-128$ for dequantizing softmax
+probabilities. This reduced the tiny model to a 19.24~KB INT8 TFLite file
+(\texttt{model\_int8.tflite}), compiled into a C header
 (\texttt{model\_data.h}) and flashed to the ESP32-S3 firmware. The resulting
 per-model file sizes and architecture parameters are summarised in
 Table~\ref{tab:model-evolution-impl}.
