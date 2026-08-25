@@ -1,0 +1,197 @@
+\chapter{IMPLEMENTATION DETAILS}
+
+
+\section{Acoustic Threat Detection Implementation}
+
+\subsection{Training Pipeline}
+
+The acoustic model development pipeline was implemented independently in
+Python using TensorFlow/Keras, rather than the Edge Impulse platform
+originally proposed. This gave full control over preprocessing, the
+architecture search described in Section~\ref{subsec:model-evolution}, and
+quantization -- control that proved necessary once memory profiling on
+target hardware revealed how extensively the model had to be redesigned.
+
+\textbf{Data Preparation:} The 6-class audio subset was split using a
+stratified 80/20 train-test split per class (\texttt{split\_dataset.py}),
+computed on the original, unaugmented files to keep the test set clean.
+Augmentation (\texttt{augment\_training.py}) -- pitch shifting, time
+stretching, and additive noise injection -- was applied only to the five
+threat classes (axe, chainsaw, gunshot, handsaw, tree falling) and
+deliberately withheld from the background class, so that augmentation does
+not make background clips sound more threat-like. This expanded the
+augmented training set to roughly 360 files per threat class and 544 files
+for background.
+
+\textbf{Feature Extraction:} Raw 16~kHz audio was converted to a log-Mel
+spectrogram using a Hann window, 512-point FFT, and a Mel filterbank,
+followed by per-frame normalisation (mean subtraction, unit standard
+deviation). Figure~\ref{fig:example_spectrograms} shows example spectrograms
+for representative classes, illustrating the harmonic bands of chainsaw
+noise, the sharp broadband transient of a gunshot, and the impulsive
+low-frequency signature of a tree-falling event.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{example_spectrograms.png}
+    \caption{Log-Mel spectrograms for representative classes}
+    \label{fig:example_spectrograms}
+\end{figure}
+
+\textbf{Model Training:} All three architecture variants (Section
+\ref{subsec:model-evolution}) were trained using categorical cross-entropy
+loss with the Adam optimizer. The final deployed (tiny) variant uses
+\texttt{GlobalAveragePooling2D} in place of a flattened dense layer, avoiding
+an oversized fully-connected weight matrix.
+
+\subsection{INT8 Quantization}
+\label{subsec:quantization-impl}
+
+Each trained model was quantized to 8-bit integers using TensorFlow Lite's
+post-training quantization API, with \texttt{TFLITE\_BUILTINS\_INT8} as the
+target op set and INT8 fixed as both the inference input and output type:
+
+\begin{verbatim}
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+converter.target_spec.supported_ops = \
+    [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+converter.inference_input_type = tf.int8
+converter.inference_output_type = tf.int8
+converter.representative_dataset = representative_dataset
+\end{verbatim}
+
+A representative dataset of 100 randomly sampled training clips was used to
+calibrate activation quantization ranges. For the deployed tiny model,
+calibration produced an input scale of 0.053753 with zero-point 17 (mapping
+the INT8 range $[-128, 127]$ to approximately $[-2.3, 5.8]$ in the
+normalised float domain), and an output scale of 0.003906 with zero-point
+$-128$ for dequantizing softmax probabilities. This reduced the tiny model
+to a 19~KB INT8 TFLite file, compiled into a C header
+(\texttt{model\_data.h}) and flashed to the ESP32-S3 firmware. The resulting
+per-model file sizes and architecture parameters are summarised in
+Table~\ref{tab:model-evolution-impl}.
+
+\begin{table}[H]
+    \centering
+    \caption{Deployed model size and parameter count by architecture variant}
+    \label{tab:model-evolution-impl}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Metric} & \textbf{Full} & \textbf{Compact} & \textbf{Tiny (deployed)} \\
+        \midrule
+        Parameters          & $\sim$65{,}000 & $\sim$24{,}000 & $\sim$9{,}000 \\
+        TFLite (INT8) size  & 78~KB          & 27~KB          & 19~KB \\
+        Tensor arena        & (undeployable) & (undeployable) & 90~KB \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+
+Table~\ref{tab:memory-budget} breaks down the full runtime memory budget on
+the ESP32-S3. The 90~KB tensor arena and 19~KB of flash-resident model
+weights leave sufficient headroom for the remaining audio pipeline,
+FreeRTOS, and networking stack within the 512~KB SRAM budget.
+
+\begin{table}[H]
+    \centering
+    \caption{ESP32-S3 runtime memory budget}
+    \label{tab:memory-budget}
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Component} & \textbf{Size} & \textbf{Region} \\
+        \midrule
+        Model weights          & 19~KB & Flash \\
+        Tensor arena           & 90~KB & DRAM \\
+        Log-Mel buffer (int16) & 32~KB & Heap \\
+        FFT + magnitude        & 5~KB  & Heap \\
+        I2S DMA                & 8~KB  & Internal \\
+        Ring buffer + stack    & $\sim$2~KB & Internal \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{LoRa Network Simulation Implementation}
+
+To evaluate the wireless communication capability of the proposed forest monitoring
+system, a LoRaWAN-based simulation environment was developed using OMNeT++
+along with the FLORA framework and the INET library.
+
+The simulation environment consists of:
+
+\begin{itemize}
+    \item LoRa end devices.
+    \item LoRa gateway.
+    \item LoRa communication medium.
+    \item Network communication components provided by the INET framework.
+\end{itemize}
+
+A basic LoRa communication scenario was implemented where LoRa sensor nodes
+communicate through a LoRa gateway.
+
+The simulation workflow includes:
+
+\begin{enumerate}
+    \item Creation and configuration of LoRa nodes using the FLORA framework.
+    \item Configuration of LoRa physical layer parameters.
+    \item Packet generation from the end devices.
+    \item Wireless packet transmission through the LoRa medium.
+    \item Reception and processing of packets at the gateway.
+\end{enumerate}
+
+The current simulation successfully validates basic LoRa communication between
+sensor nodes and provides a foundation for implementing the proposed LDSE
+multi-hop routing protocol in future work.
+
+The implemented LoRa network topology in OMNeT++ is illustrated in
+Fig.~\ref{fig:lora_simulation}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{lora_simulation.png}
+    \caption{LoRaWAN communication using OMNeT++}
+    \label{fig:lora_simulation}
+\end{figure}
+
+
+\subsection{Basic LoRa Node Communication Implementation}
+
+Before implementing the proposed multi-hop routing mechanism, a basic LoRa
+communication scenario was developed to verify the operation of individual LoRa
+end devices. In this implementation, two LoRa sensor nodes were configured to
+exchange data through the LoRa wireless communication medium.
+
+The first node acts as a LoRa transmitter, generating application data packets
+at predefined time intervals. These packets are processed through the LoRa
+protocol stack and transmitted using the LoRa physical layer. The second node
+acts as a LoRa receiver, which receives the transmitted packets and processes
+the incoming data.
+
+The communication process consists of the following steps:
+
+\begin{enumerate}
+    \item The LoRa transmitter node generates sensing data packets.
+    \item The packets are passed through the application and LoRa protocol layers.
+    \item The LoRa radio module performs wireless transmission using configured
+    parameters such as spreading factor, bandwidth, and transmission power.
+    \item The receiving LoRa node detects and receives the transmitted packet.
+    \item The received data is delivered to the application layer for further
+    processing.
+\end{enumerate}
+
+This basic communication model validates the successful exchange of information
+between LoRa devices and confirms the proper configuration of the FLORA
+framework and INET communication modules. The implemented two-node LoRa
+communication scenario serves as the initial building block for extending the
+network towards gateway-based and multi-hop communication.
+
+The implemented two-node LoRa communication topology is shown in
+Fig.~\ref{fig:two_node_lora}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{two_node_lora.png}
+    \caption{LoRa communication between two LoRa end devices in OMNeT++}
+    \label{fig:two_node_lora}
+\end{figure}

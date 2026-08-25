@@ -1,0 +1,35 @@
+% ============================================================================
+%  sections/7_project_budget.tex -- Chapter 7: PROJECT BUDGET
+% ============================================================================
+
+% Removed redundant \section header here to avoid duplicate titles
+
+Table~\ref{tab:project-budget} presents the estimated budget for the hardware and
+development components required for the prototype implementation.
+
+% --- Table 7.1: Project Budget ----------------------------------------------
+
+\begin{table}[htbp]
+  \centering
+  \caption{Project Budget}
+  \label{tab:project-budget}
+  \vspace{1ex} % Adds a little clean spacing between caption and table
+  \begin{tabularx}{\textwidth}{@{} c >{\raggedright\arraybackslash}X c c c @{}}
+    \toprule
+    \textbf{S.N.} & \textbf{Component} & \textbf{Quantity} & \textbf{Unit Price (NPR)} & \textbf{Total (NPR)} \\
+    \midrule
+    1  & ESP32-S3 Development Board                  & 3 & 1600   & 4,800 \\
+    2  & LoRa Module  (SX1278)                       & 3 & 900 & 2,700 \\
+    3  & MQ135 Smoke/Gas Sensor                      & 2 & 250   & 500   \\
+    4  & DHT22 Temperature-Humidity Sensor           & 2 & 400   & 800   \\
+    5  & MEMS Microphone Module (I2S)                & 2 & 600   & 1,200 \\
+    6  & Li-ion Battery                              & 3 & 200   & 600   \\
+    7  & Enclosure and Mounting Hardware             & 3 & 300   & 900   \\
+    8  & Miscellaneous (PCB, wires, connectors, etc.) & 3 & 300   & 900   \\
+    \midrule
+    \multicolumn{4}{r}{\textbf{Total Estimated Budget}} & \textbf{12,400} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\clearpage

@@ -1,0 +1,173 @@
+%Tribhuvan University Project Proposal Template
+\documentclass[12pt,a4paper,oneside]{report}
+
+% Packages
+\usepackage[left=1.5in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage{graphicx}
+\graphicspath{{./Graphics/}}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{datetime}
+
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{titling}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage[]{hyperref}
+\usepackage{mathptmx} % Times New Roman font
+\usepackage[toc,page,title]{appendix}
+
+% Date format
+\newdateformat{monthyeardate}{\monthname[\THEMONTH], \THEYEAR}
+
+% Line spacing
+\renewcommand{\baselinestretch}{1.5}
+\setlength{\parskip}{18pt}
+\setlength{\parindent}{0em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%------------------------------------------------
+% Heading 1 (Chapter) formatting
+%------------------------------------------------
+\titleformat{\chapter}[hang]
+  {\normalfont\normalsize\bfseries}
+  {\thechapter}
+  {1em}
+  {\normalsize}
+\titlespacing*{\chapter}{0pt}{-36.4pt}{12pt}
+
+
+%------------------------------------------------
+% Heading 2 (Section) formatting
+%------------------------------------------------
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries}
+  {\thesection}
+  {1em}
+  {}
+\titlespacing*{\section}{0pt}{0pt}{10pt}
+
+
+%------------------------------------------------
+% Heading 3 (Subsection) formatting
+%------------------------------------------------
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries} 
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*{\subsection}{0pt}{0pt}{8pt}
+
+
+%------------------------------------------------
+% Heading 4 (Subsubsection) formatting
+%------------------------------------------------
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries} 
+  {\thesubsubsection}
+  {1em}
+  {}
+\titlespacing*{\subsubsection}{0pt}{0pt}{6pt}
+
+%------------------------------------------------
+% Heading 5 (Paragraph) formatting
+%------------------------------------------------
+\titleformat{\paragraph}[hang]
+  {\normalfont\normalsize\bfseries} 
+  {\theparagraph}
+  {1em}
+  {}
+\titlespacing*{\paragraph}{0pt}{0pt}{6pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Formats Table Captions
+\captionsetup[table]{singlelinecheck=on, font=normalsize, labelfont=bf}
+% Formats Figure Captions
+\captionsetup[figure]{font=normalsize, labelfont=bf}
+
+%------------------------------------------------
+% Figure and Table numbering: 3-1 instead of 3.1
+%------------------------------------------------
+\renewcommand{\thefigure}{\thechapter-\arabic{figure}}
+\renewcommand{\thetable}{\thechapter-\arabic{table}}
+
+%------------------------------------------------
+% List of Figures entry format using titletoc
+% Changes: "3.1  Title" → "Figure 3-1: Title"
+%------------------------------------------------
+\titlecontents{figure}[0pt] % 0pt sets it flush left
+  {\addvspace{0pt}} % Spacing above the entry
+  {Figure~\thecontentslabel:\hspace{1em}} % Format before the title
+  {}
+  {\titlerule*[0.7pc]{.}\contentspage} % Adds dot leaders and page number
+
+%------------------------------------------------
+% List of Tables entry format using titletoc
+% Changes: "3.1  Title" → "Table 3-1: Title"
+%------------------------------------------------
+\titlecontents{table}[0pt] % 0pt sets it flush left
+  {\addvspace{0pt}} % Spacing above the entry
+  {Table~\thecontentslabel:\hspace{1em}} % Format before the title
+  {}
+  {\titlerule*[0.7pc]{.}\contentspage} % Adds dot leaders and page number
+
+% Metadata
+\title{Project Title}
+\author{Chitra Raj Joshi (THA080BEI018) \\ Keshar Singh Sunar (THA080BEI022) \\ Prabesh Parajulee (THA080BEI029) \\ Santosh Gadtaula (THA080BEI042)}
+\date{\monthyeardate\today}
+
+% Rename headings
+\renewcommand{\bibname}{REFERENCES}
+\renewcommand\contentsname{TABLE OF CONTENTS}
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\listtablename}{LIST OF TABLES}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%-------------------------------Report----------------------------------------%
+\begin{document}
+
+% Cover and Title Pages
+\input{section/cover}
+
+% Prefatory Pages (roman numbering)
+\pagenumbering{roman}
+\setcounter{page}{1}
+\input{section/title}
+\include{section/Declaration}
+\include{section/Certificate_of_Approval}
+\include{section/Copyright}
+\include{section/acknowledgement}
+\include{section/abstract}
+
+% TOC, List of Figures, List of Tables, abbreviations
+\include{section/lists}
+
+% Main Body (arabic numbering)
+\pagenumbering{arabic}
+\include{section/introduction}
+\include{section/literaturereview}
+\include{section/requirement_analysis}
+\include{section/methodology}
+\include{section/Implementation_details}
+\include{section/result_and_analysis}
+\include{section/remaining_task}
+\include{section/Conclusion}
+\include{section/appendices}
+
+% References
+\bibliographystyle{ieeetr}
+\bibliography{refrences/ref}
+\addcontentsline{toc}{chapter}{REFERENCES}
+
+
+
+\end{document}

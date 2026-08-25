@@ -1,0 +1,140 @@
+% ============================================================================
+%  section/remaining_tasks.tex -- Remaining Project Tasks
+% ============================================================================
+\chapter{FUTURE ENHANCEMENTS}
+
+Based on the current project status, the following tasks remain to complete
+the minor project. The work is divided into two parts: Part~A covers the
+forest fire and acoustic threat detection hardware and TinyML pipeline, and
+Part~B covers the LoRa communication and LDSE protocol simulation.
+
+% ============================================================================
+\subsection*{Part A: Forest Fire \& Acoustic Threat Detection (Hardware \& TinyML)}
+% ============================================================================
+
+This portion of the project focuses on collecting environmental data,
+processing audio on the edge, and calculating localized hazard levels.
+
+\subsubsection{Edge Hardware and Sensor Integration}
+
+\begin{itemize}
+    \item \textbf{Circuit Assembly:} Wire the core sensors (DHT22 for
+    temperature/humidity and MQ135 for gas/smoke) and the MEMS microphone
+    directly to the ESP32-S3 microcontroller.
+
+    \item \textbf{Deep Sleep Optimization:} Program the ESP32-S3 to operate
+    in deep sleep mode to conserve battery. It should wake up at fixed
+    intervals (e.g., every 5 minutes) to sample environmental sensors, run
+    the TinyML audio classifier, and broadcast results before returning to
+    sleep.
+
+    \item \textbf{Calibration:} Fine-tune MQ135 gas readings to ignore
+    baseline environmental shifts and establish clean thresholds for smoke
+    detection.
+\end{itemize}
+
+\subsubsection{Acoustic Preprocessing and Model Deployment}
+
+\begin{itemize}
+    \item \textbf{Spectrogram Generation:} Implement local feature
+    extraction in C++ on the ESP32-S3. Raw audio captured from the MEMS
+    microphone must be converted into a Log-Mel spectrogram (using
+    windowing, FFT, and a Mel-filterbank) matching the Python pipeline
+    parameters.
+
+    \item \textbf{Model Quantization and Loading:} Convert the trained
+    TensorFlow model to a TensorFlow Lite Micro format. Apply INT8
+    quantization to compress the model size to fit the ESP32-S3's
+    constrained SRAM and Flash memory.
+
+    \item \textbf{On-Device Inference:} Run local inference on the ESP32-S3
+    to detect real-time threats (such as chainsaws, axe cuts, or gunshots)
+    with low latency.
+\end{itemize}
+
+\subsubsection{Fire Risk Algorithm and Sensor Fusion}
+
+\begin{itemize}
+    \item \textbf{Multisensor Fusion:} Write an on-device algorithm to
+    calculate a dynamic ``Fire Risk Score'' using weighted inputs from the
+    DHT22 and MQ135.
+
+    \item \textbf{Threshold Triggering:} Set classification outputs to
+    trigger immediate alert transmissions if the risk score crosses into
+    the ``High Risk'' zone, bypassing standard sleep intervals.
+\end{itemize}
+
+\subsubsection{Gateway and Dashboard Setup}
+
+\begin{itemize}
+    \item \textbf{Gateway Receiver Firmware:} Set up a receiving LoRa node
+    that accepts incoming packets from the field and forwards them over
+    Wi-Fi (via HTTP or MQTT).
+
+    \item \textbf{Live Web Dashboard:} Build a central monitoring web page
+    to display incoming sensor values (temperature, humidity, gas), live
+    fire risk level, localized acoustic threat alerts, and device battery
+    status.
+\end{itemize}
+
+% ============================================================================
+\subsection*{Part B: LoRa Communication \& Protocol Simulation (Core Part)}
+% ============================================================================
+
+This portion transitions the current OMNeT++/FLORA simulation setup over to
+\textbf{ns-3} to implement and test the LDSE multi-hop routing protocol.
+
+\subsubsection{ns-3 Environment Setup and Channel Modeling}
+
+\begin{itemize}
+    \item \textbf{Simulation Migration:} Transition from OMNeT++ to an ns-3
+    environment, incorporating the ns-3 LoRaWAN module.
+
+    \item \textbf{Forest Path Loss Model:} Implement a realistic wireless
+    channel model that simulates forest conditions. This includes
+    log-distance path loss combined with foliage attenuation factors to
+    mimic how thick trees degrade LoRa signals compared to an open field.
+\end{itemize}
+
+\subsubsection{LDSE Protocol Implementation}
+
+\begin{itemize}
+    \item \textbf{Dynamic Layer Formation:} Program nodes to automatically
+    assign themselves to ``layers'' based on their distance (hop-count)
+    from the central gateway.
+
+    \item \textbf{Energy-Aware Parent Selection:} Implement the selection
+    logic where a leaf node dynamically chooses its uplink relay parent
+    based on path quality, link stability, and the parent node's remaining
+    battery.
+
+    \item \textbf{Time Synchronization:} Set up dynamic beaconing to
+    broadcast synchronization epochs, keeping the multi-hop network aligned
+    in time to prevent slot collisions.
+
+    \item \textbf{Slot-Based Scheduling and Sleep:} Program the sleep-wake
+    schedules where relays and leaf nodes power down their radios outside
+    of their assigned reception/transmission slots.
+\end{itemize}
+
+\subsubsection{Performance Evaluation and Comparative Analysis}
+
+\begin{itemize}
+    \item \textbf{Scalability Testing:} Run simulations scaling from 20 up
+    to 100 nodes across a virtual $1$ to $5\,\text{km}^2$ forest grid.
+
+    \item \textbf{Metrics Extraction:} Measure and export the following
+    performance metrics:
+    \begin{itemize}
+        \item \textbf{Packet Delivery Ratio (PDR):} Percentage of
+        generated packets successfully reaching the gateway.
+        \item \textbf{End-to-End Latency:} Time taken for an alert to
+        traverse the multi-hop network.
+        \item \textbf{Energy Consumption:} Average energy drain per node
+        to assess total network lifetime.
+    \end{itemize}
+
+    \item \textbf{Comparison:} Graph and analyze the results of the LDSE
+    multi-hop protocol directly against standard single-hop LoRaWAN to
+    prove its benefits in coverage extension and energy conservation.
+\end{itemize}

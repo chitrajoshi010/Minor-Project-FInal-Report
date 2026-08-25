@@ -1,0 +1,34 @@
+% ============================================================================
+%  section/Conclusion.tex -- Conclusion
+% ============================================================================
+\chapter{CONCLUSION}
+
+This minor project investigated and demonstrated the feasibility of a scalable
+multi-hop LoRa network for intelligent forest monitoring, integrating
+environmental sensing, edge-based machine learning, and low-power
+communication into a single sensor node design.
+
+The hardware prototype successfully collected temperature, humidity, and gas
+concentration data and combined them through multisensory fusion to compute a
+dynamic fire risk score. The testing results confirmed that combining multiple
+environmental parameters provides a more reliable indication of fire risk than
+individual sensor threshold methods and reduces false alarms caused by
+temporary fluctuations in a single reading.
+
+The TinyML inference pipeline, evaluated on the training dataset, demonstrated
+that acoustic features could be effectively classified on-device, enabling the
+detection of threats such as chainsaws, axe cuts, and gunshots close to where
+the sound occurs. This edge-based approach avoids sending raw audio over the
+network, significantly reducing bandwidth and energy consumption.
+
+The LoRa communication simulation validated the ability of the network to
+extend coverage beyond the range of a single gateway. The proposed LDSE
+multi-hop protocol is expected to provide an energy-efficient, slot-scheduled
+routing scheme that maintains synchronization across the network while
+allowing nodes to remain in deep sleep outside their assigned time slots.
+
+Overall, the design demonstrates that a low-cost, scalable, and
+energy-efficient solution based on LoRa and TinyML is achievable for real-time
+forest monitoring in community forests and protected areas. The remaining
+tasks described in the preceding chapter define the path toward a complete
+field-deployable implementation.

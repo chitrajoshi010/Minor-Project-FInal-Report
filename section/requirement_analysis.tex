@@ -1,0 +1,94 @@
+% ============================================================================
+%  sections/3_requirement_analysis.tex -- Chapter 3: REQUIREMENT ANALYSIS
+% ============================================================================
+\chapter{REQUIREMENT ANALYSIS}
+\section{Hardware Requirements}
+The hardware components must support real-time environmental monitoring, local edge-based acoustic processing, and low-power long-range communication. The specific hardware requirements include:
+
+\begin{itemize}
+    \item \textbf{Microcontroller (ESP32-S3):} 
+    Must feature a dual-core Xtensa LX7 processor running up to 240 MHz with vector instructions (to accelerate TinyML neural network calculations). It requires at least 512 KB of on-chip SRAM and support for external PSRAM to handle audio buffering and spectrogram conversion.
+    
+    \item \textbf{LoRa Transceiver (SX1278):} 
+    Must operate in the 433 MHz ISM band with a high link budget (up to 170 dB) and high sensitivity to ensure reliable, multi-hop data transmission through dense forest canopies and rugged terrain.
+    
+    \item \textbf{Acoustic Sensor (MEMS Microphone):} 
+    An omnidirectional digital MEMS microphone (such as the INMP441) using an I2S interface to stream high-fidelity, low-noise audio directly to the ESP32-S3 for acoustic analysis.
+    
+    \item \textbf{Environmental Sensors:} 
+    An integrated array containing a high-accuracy temperature and humidity sensor (e.g., DHT22 or SHT3x) and a gas sensor (e.g., MQ series) to gather ambient environmental data for fire risk estimation.
+    
+    \item \textbf{Power Management System:} 
+    A low-dropout (LDO) voltage regulator, a Li-ion/LiPo battery charger circuit, and a solar panel interface to sustain continuous, autonomous outdoor operations.
+\end{itemize}
+
+\section{Software Requirements}
+The software stack must support local signal processing, machine learning inference, network routing simulation, and data visualization. The software requirements are classified as follows:
+
+\begin{itemize}
+    \item \textbf{Embedded Development Environment:} 
+    \begin{itemize}
+        \item \textbf{ESP-IDF / Arduino IDE:} Used for writing, compiling, and flashing the firmware onto the ESP32-S3.
+        \item \textbf{TinyML Framework (TensorFlow Lite for Microcontrollers):} Required to load, optimize, and run the quantized acoustic classification model directly on the microcontroller.
+    \end{itemize}
+    
+    \item \textbf{Digital Signal Processing (DSP) Libraries:}
+    Libraries used to transform raw audio streams into Mel-spectrograms for
+    model inference.
+    
+    \item \textbf{Simulation Tools:} 
+    \begin{itemize}
+        \item \textbf{OMNeT++:} Used to model the physical wireless network.
+        \item \textbf{FLORA Framework:} An OMNeT++ based simulator utilized to simulate the LoRa physical layer, evaluate packet delivery ratios, and test the LDSE multi-hop routing protocol.
+        \item \textbf{ns-3 Network Simulator:} Utilized to simulate the LoRa network, evaluate packet delivery ratio, latency, energy consumption, and network scalability, and validate the performance of the proposed LDSE multi-hop routing protocol.
+    \end{itemize}
+    
+    \item \textbf{Application and Visualization Software:} 
+    \begin{itemize}
+        \item \textbf{Web Dashboard Framework:} A web-based application (built using modern web technologies) to display real-time sensor readings, historical trends, acoustic classification events, and node health status.
+    \end{itemize}
+\end{itemize}
+\section{Feasibility Study}
+\subsection{Technical Feasibility:}The ESP32-S3 microcontroller provides sufficient computational capability for TinyML inference at the edge, with its Xtensa LX7
+dual-core processor and a vector instruction set enabling efficient neural network
+computation within the available 512~KB SRAM. The SX1278 LoRa transceiver provides
+long-range communication with a link budget exceeding 170~dB, well suited for the
+dense vegetation and terrain variation found in Nepalese community forests. The
+Edge Impulse platform provides a mature and well-documented pipeline for training,
+quantizing, and deploying CNN models to the ESP32-S3 target, and TensorFlow Lite
+Micro has been deployed successfully on similar hardware in prior academic work.
+All hardware components selected for this project are commercially available and
+have documented community support.
+
+\subsection{Economic Feasibility:} The estimated total prototype budget of
+approximately NPR 12,400 positions this system as a highly cost-effective
+alternative to commercial forest monitoring solutions, which typically require
+expensive satellite or cellular infrastructure.
+
+The use of commodity hardware components and open-source software stacks
+including Edge Impulse, TensorFlow Lite Micro, and the Arduino framework
+eliminates licensing costs. The modular and scalable architecture means that
+additional forest nodes can be added to expand coverage at a marginal per-node
+cost well below the gateway cost, making the system economically viable for
+community forest committees operating under budget constraints.
+
+\subsection{Operational Feasibility:} The system is designed to operate autonomously
+with deep-sleep scheduling and event-driven wake-up, requiring minimal human
+intervention after initial deployment and configuration. Solar-assisted battery
+operation can extends node lifetime significantly in remote forest environments
+where regular maintenance visits are impractical. The real-time web dashboard
+provides an intuitive interface for forest rangers to monitor alerts, review event
+histories, and identify geographic patterns of illegal activity without requiring
+technical expertise. Fail-safe design including confidence thresholding for alert
+transmission reduces false alarm rates, maintaining the trust of operators in the
+system's outputs.
+
+\subsection{Time Feasibility:} The proposed two month project schedule is realistic
+given the availability of the FSC22 dataset, the Edge Impulse platform's rapid
+model development capability, the team's familiarity with embedded systems and IoT
+development, and the modular architecture of the system design. Each phase builds
+incrementally on the previous one, and the independence of the acoustic model
+training, fire-risk model development, LDSE protocol implementation, and dashboard
+development workstreams allows parallel progress across team members.
+
+\clearpage

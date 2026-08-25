@@ -1,0 +1,134 @@
+% ============================================================================
+%  sections/1_introduction.tex -- Chapter 1: INTRODUCTION
+% ============================================================================
+
+\chapter{INTRODUCTION}
+
+\section{Background}
+Forests are among the most critical ecosystems on Earth, providing ecological
+stability, biodiversity, and carbon sequestration services that are vital to
+sustaining life. However, they face growing and compounding threats from illegal
+logging, poaching, and wildfires, particularly in densely forested regions such as
+Nepal's community forests and protected areas. Conventional patrol-based monitoring
+cannot cover large remote areas continuously, and incidents often go undetected
+until significant environmental and economic damage has already occurred.
+Nepal experiences approximately 40,000 hectares of burned forest area annually \cite{matinUnderstandingForestFire2017}\cite{mishraForestFirePattern2023}, with more than 78\% to 86 \% of fire incidents occurring between March and May during the dry season\cite{bhattaraiAnticipatoryForestfireRisk2026}. Historical analyses also indicate that the total burned area has increased by approximately 0.6\% per year since 2001, highlighting the growing need for early detection and continuous monitoring systems. Human activities combined with prolonged dry conditions remain the dominant contributors to forest fire occurrence.
+
+Low-power wide-area networks such as LoRa support long-range, energy-efficient
+wireless links that are well suited for deployment in dense and geographically
+challenging forest environments. Prior systems have used sound and motion sensing
+for illegal logging and wildlife protection, but many rely on single-hop star
+topologies that limit coverage range and require dense gateway infrastructure.
+Machine learning deployed at the edge further enables intelligent, real-time
+decision-making without dependence on cloud connectivity, which is often
+unavailable in remote forests.
+
+Acoustic sensing has emerged as a particularly effective way to detect illegal
+logging and poaching activity, since sounds such as chainsaw operation, axe
+strikes, and gunshots are highly distinctive and can be identified even in
+dense forest canopy where visual monitoring is impractical. Early acoustic
+detectors relied on simple threshold-based or hand-crafted feature methods,
+which proved unreliable amid the variability of natural forest noise.
+Convolutional neural networks trained on Mel-spectrogram representations have
+since substantially improved classification accuracy, but such models have
+traditionally required cloud servers or power-hungry edge devices to run,
+making them unsuitable for standalone, battery-powered deployment in remote
+forest environments. Recent advances in TinyML, enabling quantized neural
+networks to run directly on low-power microcontrollers, make it possible to
+perform this acoustic classification entirely on-device, removing the
+dependence on continuous connectivity while keeping node power consumption
+low enough for long-term field deployment.
+
+This project addresses the coverage and intelligence gap by combining multi-hop
+LDSE networking with edge artificial intelligence on the ESP32-S3 microcontroller
+for unified fire detection, acoustic threat identification, and network scalability
+in a single low-cost platform.
+
+\section{Motivation}
+
+Forests play a critical role in maintaining ecological balance, yet they remain
+vulnerable to threats such as wildfires, illegal logging, and poaching. These
+activities often occur in remote areas where continuous human supervision is
+impractical, causing incidents to go undetected until significant environmental and
+economic damage has already occurred. Existing monitoring approaches are often
+limited by inadequate coverage, delayed detection, and the challenges of operating
+in large, inaccessible forest regions. Therefore, there is a growing need for an
+intelligent and scalable monitoring system capable of providing early threat
+detection and reliable coverage across vast forest environments.
+
+Nepal's community forests and protected reserves, including those in the Terai and
+mid-hill regions, face persistent threats from unauthorized timber extraction,
+wildlife poaching, and seasonal wildfires. The absence of affordable and autonomous
+monitoring infrastructure means that forest rangers must physically patrol vast
+areas, a process that is both costly and ineffective. An integrated IoT system
+combining LoRa communication and on-device machine learning can transform how these
+threats are detected and reported, enabling faster response times, improving
+conservation outcomes, and contributing to the long-term protection of forest
+ecosystems.
+
+\section{Problem Definition}
+
+Most existing LoRaWAN-based forest monitoring systems rely on a single-hop
+communication model where sensor nodes must directly reach a central gateway, which
+significantly limits coverage in dense and geographically challenging forest
+environments. These systems often depend on continuous or frequent data
+transmission, leading to high energy consumption and reduced node lifetime,
+particularly in remote deployments where maintenance is difficult. In addition, many
+traditional approaches use simple threshold-based detection mechanisms that are
+highly sensitive to environmental noise, resulting in frequent false alarms or
+missed detections when thresholds are not properly tuned.
+
+Furthermore, existing designs are typically optimized for a single type of event
+such as fire detection, lacking the capability to simultaneously monitor multiple
+threats like illegal logging or human intrusion. Sound-based detection systems in
+the literature often perform inference on cloud servers, making them unsuitable for
+forest environments with limited or no connectivity. The absence of efficient
+in-network processing and reliance on raw data streaming to central servers further
+increases communication overhead and limits scalability in large-scale forest
+monitoring scenarios.
+
+\section{Objectives}
+The project objectives are:
+\begin{itemize}
+  \item To develop an intelligent forest monitoring node that computes a
+  real-time fire risk score from fused environmental sensor data and detects
+  acoustic threats by deploying a quantized TinyML model on the edge to
+  identify illegal sounds such as chainsaws, axes, and gunshots.
+  \item To deploy the LDSE multi-hop LoRa protocol and benchmark its coverage
+  extension and energy efficiency improvements against conventional single-hop
+  LoRaWAN.
+\end{itemize}
+
+\section{Report Organization}
+This report is organized as follows:
+\begin{itemize}
+  \item \textbf{Chapter 1: Introduction} presents the background, motivation,
+  problem definition, objectives, project scope and applications, and the
+  organization of this report.
+  \item \textbf{Chapter 2: Literature Review} summarizes related work on forest
+  fire detection, acoustic threat detection, and multi-hop LoRa communication.
+  \item \textbf{Chapter 3: Requirement Analysis} presents the hardware and
+  software requirements of the system along with a feasibility study.
+  \item \textbf{Chapter 4: System Architecture and Methodology} describes the
+  overall system architecture, block diagram, and the methodology adopted for
+  the design.
+  \item \textbf{Chapter 5: Implementation Details} explains the details of the
+  hardware and software implementation of the prototype.
+  \item \textbf{Chapter 6: Result and Analysis} presents and discusses the
+  results obtained from the testing and simulation.
+  \item \textbf{Chapter 7: Future Enhancements} outlines the tasks that remain
+  to complete the project.
+  \item \textbf{Chapter 8: Conclusion} summarizes the findings of the project.
+  \item \textbf{Appendices} contain the project schedule, project budget, and
+  hardware prototype setup details.
+\end{itemize}
+
+\section{Scope and Applications}
+\subsection{Scope}
+The proposed prototype consists of two forest sensor nodes and one gateway. The sensor nodes are built on the ESP32-S3 platform and communicate using LoRa technology, while the LDSE multi-hop routing protocol enables reliable data transmission over distances exceeding 2 km when a direct gateway connection is unavailable. The gateway receives sensor data and transmits it to a web-based dashboard through Wi-Fi, allowing real-time monitoring and alert visualization. System evaluation includes laboratory testing to validate sensor readings, assess acoustic model inference accuracy, and verify network communication. In addition, limited outdoor field trials will be conducted to evaluate communication reliability, overall system performance, and energy efficiency. The prototype is limited to a single-gateway architecture, and large-scale multi-gateway deployments and cellular backhaul integration are beyond the scope of this work.
+\newpage
+\subsection{Applications}
+The proposed system is designed for deployment in community forests and protected areas in Nepal, where continuous environmental monitoring is required but conventional monitoring infrastructure is often unavailable or too costly. Its low-cost, low-power, and autonomous design makes it suitable for long-term operation in remote forest environments. The system can support early detection of forest fires, illegal logging activities, and other environmental events through real-time sensor monitoring and acoustic analysis. Additionally, the web-based dashboard enables forest authorities and conservation organizations to remotely monitor forest conditions and respond promptly to detected incidents, thereby improving forest management and environmental protection.
+
+
+\clearpage

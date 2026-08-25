@@ -1,0 +1,320 @@
+% ============================================================================
+%  sections/methodology/3_3_communication_system_design.tex
+%  Section 3.3 -- Communication System Design
+% ============================================================================
+\section{Communication System Design}
+
+To overcome the coverage limitations of traditional LoRaWAN (single-hop) and the
+high control overhead of reactive protocols like AODV, the network adopts the
+\textbf{Layered Dynamic Synchronization Energy-saving (LDSE)} protocol.\cite{li2025ldse}
+In standard single-hop LoRaWAN, a node positioned several kilometres deep in a
+jungle must scale its Spreading Factor up to SF12 to overcome heavy canopy
+attenuation, spiking the Time-on-Air and draining the battery with every
+transmission. LDSE solves this by structuring the forest into logical, concentric
+tiers wrapped around one or more central gateway proxies, so each node
+communicates only with its nearest parent tier using short, low-power hops at
+optimised spreading factors such as SF7 or SF8.
+
+
+% ----------------------------------------------------------------------------
+\subsection{LoRa Communication Fundamentals}
+% ----------------------------------------------------------------------------
+
+LoRa (Long Range) is a proprietary, physical-layer wireless technology developed
+by Semtech that enables long-range, low-power, and low-data-rate connectivity for
+battery-powered IoT devices. It is based on Chirp Spread Spectrum (CSS)
+modulation, a technique in which the carrier frequency is swept linearly over time
+to encode information. CSS provides high receiver sensitivity, strong resistance to
+interference, and reliable communication under low signal-to-noise ratio (SNR)
+conditions, making it well suited to large-scale environmental monitoring
+applications such as forest sensing, where nodes are widely dispersed and often
+obstructed by dense vegetation.
+
+
+% ----------------------------------------------------------------------------
+\subsection{LoRa Communication Parameters}
+% ----------------------------------------------------------------------------
+
+The communication performance of a LoRa link is governed primarily by four
+parameters, each involving a trade-off between range, data rate, latency, and
+energy consumption.
+
+\begin{itemize}
+  \item \textbf{Spreading Factor (SF):} Determines how much a signal is
+        ``spread'' in the frequency domain before transmission. A higher SF
+        (e.g., SF12) increases communication range and link robustness at the
+        cost of a longer packet Time-on-Air and higher energy consumption,
+        whereas a lower SF (e.g., SF7) offers faster transmission and lower
+        energy use at the cost of reduced range.
+
+  \item \textbf{Bandwidth (BW):} The width of the frequency channel used for
+        transmission (commonly 125~kHz, 250~kHz, or 500~kHz in the sub-GHz
+        ISM bands). A wider bandwidth increases data rate and reduces
+        Time-on-Air but lowers receiver sensitivity, shortening effective range.
+
+  \item \textbf{Coding Rate (CR):} The ratio of forward error correction (FEC)
+        redundancy added to a packet. A higher coding rate improves resilience
+        to burst interference and multipath fading at the expense of additional
+        transmission overhead and airtime.
+
+  \item \textbf{Transmission Power:} The radiated output power of the
+        transceiver. Higher transmission power extends range but increases
+        energy consumption per packet and, in ISM bands, is often constrained
+        by regional duty-cycle and power regulations.
+\end{itemize}
+
+Selecting appropriate values for these parameters therefore represents an
+important design trade-off between coverage, reliability, latency, and battery
+life, and directly motivates the multi-hop, low-SF approach adopted by LDSE
+(Section~\ref{subsec:ldse-overview}).
+
+
+% ----------------------------------------------------------------------------
+\subsection{Conventional LoRaWAN Architecture}
+% ----------------------------------------------------------------------------
+
+LoRaWAN defines the networking protocol operating above the LoRa physical
+layer. A conventional LoRaWAN deployment follows a \textit{Star-of-Stars}
+topology, in which multiple end devices communicate directly with one or more
+gateways. These gateways transparently forward received packets to a central
+Network Server, which performs device authentication, duplicate packet removal,
+adaptive data rate management, and routing toward the Application Server.
+
+This architecture offers simple deployment, centralised management, and low
+maintenance overhead, making it well suited to applications such as smart
+agriculture, smart cities, and general-purpose environmental sensing. However,
+communication remains inherently single-hop: every sensor node must maintain a
+direct wireless link to a gateway, regardless of terrain or vegetation density.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Limitations of Conventional LoRaWAN}
+% ----------------------------------------------------------------------------
+
+Although conventional LoRaWAN provides excellent communication range under
+open-terrain conditions, dense forests introduce severe propagation losses due to
+vegetation, tree trunks, canopy shadowing, and irregular topography. Maintaining
+a direct gateway link under these conditions typically requires raising the
+spreading factor, which significantly increases packet airtime, transmission
+energy, and channel occupancy. Furthermore, deploying additional gateways to
+compensate for coverage gaps substantially increases infrastructure cost --- a
+burden that is particularly impractical for low-budget community forest
+deployments in Nepal.
+
+These constraints define the coverage-versus-cost trade-off that motivates the
+shift away from a single-hop star topology toward an energy-efficient multi-hop
+architecture.
+
+
+% ----------------------------------------------------------------------------
+\subsection{LDSE Protocol Overview}
+\label{subsec:ldse-overview}
+% ----------------------------------------------------------------------------
+
+To overcome the limitations described above, this project adopts the Layered
+Dynamic Synchronization Energy-saving (LDSE) protocol. Rather than relying on
+long-distance single-hop communication, LDSE establishes an energy-efficient
+multi-hop hierarchy in which nearby nodes relay data through synchronised
+intermediate parents. This approach extends network coverage, improves link
+reliability under forest propagation conditions, reduces transmission energy, and
+enables scalable deployment over large monitoring areas while maintaining
+low-power operation.
+
+LDSE organises communication through three clear structural phases:
+\textbf{Layer Assignment}, \textbf{Dynamic Time-Synchronisation}, and
+\textbf{Time-Slotted Contention-Free Data Transmission}, detailed in Sections
+\ref{subsec:ldse-architecture}--\ref{subsec:ldse-multichannel}.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Architecture of LDSE}
+\label{subsec:ldse-architecture}
+% ----------------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.47\linewidth]{ldse_protocol_network_hierarchy.pdf}
+    \caption{LDSE protocol network hierarchy}
+    \label{fig:ldse-hierarchy}
+\end{figure}
+\newpage
+
+\textbf{Layered Topology:} The gateway (Layer~0) broadcasts an initialisation
+beacon during network setup. Each node assigns itself a hierarchical layer by
+incrementing the layer value carried in the beacon it receives:
+\begin{equation}
+\label{eq:layer_assignment}
+L_{\text{node}} = L_{\text{received}} + 1
+\end{equation}
+This cascading propagation forms a tree-structured topology across the entire
+deployment area without any centralised configuration, as shown in
+Figure~\ref{fig:ldse-hierarchy}.
+
+When a forest node is more than 2~km from the gateway, alert packets are
+automatically forwarded through intermediate relay nodes operating under LDSE
+routing, extending effective network coverage without the need for additional
+gateways.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Time Synchronization and Epoch Structure}
+\label{subsec:ldse-sync}
+% ----------------------------------------------------------------------------
+
+\textbf{Time-Slotted Epoch Structure:} LDSE divides time into global operational
+epochs, each subdivided into three non-overlapping windows: a
+\emph{Synchronisation Window} in which all transceivers wake simultaneously to
+receive time-alignment correction beacons from parent layers; a \emph{Data
+Transmission Window} implementing TDMA-gated uplinks layer by layer; and a
+\emph{Deep-Sleep Period} during which all microcontrollers and radio
+transceivers enter ultra-low-leakage power states consuming as little as
+$7\,\mu\text{A}$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\linewidth]{ldse_protocol_epoch_structure.png}
+    \caption{LDSE Protocol Epoch Structure}
+    \label{fig:ldse-epoch}
+\end{figure}
+
+\textbf{Time Synchronisation:} The Flooding Time Synchronisation Protocol
+(FTSP) distributes a global timestamp from the gateway to all nodes, correcting
+clock drift caused by ambient temperature variation in the forest canopy and
+ensuring nodes do not miss their relay windows while remaining in deep sleep for
+the majority of each cycle.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Parent Selection and Routing Mechanism}
+\label{subsec:ldse-parent-selection}
+% ----------------------------------------------------------------------------
+
+\textbf{Parent Selection and Implicit Route Exploration (IRE):} When a node
+hears multiple candidate parents within a higher tier, it selects the optimal
+upstream relay using a combined score that balances link quality against
+remaining relay energy:
+\begin{equation}
+\label{eq:parent_score}
+\text{Score} = \alpha \cdot \text{RSSI}_{\text{link}}
++ \beta \cdot \left(1 - \frac{E_{\text{consumed}}}{E_{\text{initial}}}\right)
+\end{equation}
+
+Routes are discovered through active beaconing or passive eavesdropping on
+existing transmissions, limiting route-discovery overhead to approximately 5\%
+of total traffic and avoiding the broadcast storms characteristic of AODV.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Multi-Channel Communication}
+\label{subsec:ldse-multichannel}
+% ----------------------------------------------------------------------------
+
+\textbf{Multi-Channel Separation:} A public channel carries handshake and
+synchronisation messages, while a private channel carries payload data, avoiding
+intra-network collisions and congestion at relay nodes.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Power Consumption Model}
+% ----------------------------------------------------------------------------
+
+The energy savings of LDSE arise from exchanging extended receiver listening
+times for drastically reduced transmission times. The total energy consumed by a
+node during one active operational cycle is:
+\begin{equation}
+\label{eq:total_energy}
+E_{\text{total}} = E_{\text{sleep}} + E_{\text{sense}}
++ E_{\text{processing}} + E_{\text{sync}}
++ E_{\text{tx}} + E_{\text{rx}}
+\end{equation}
+The dominant saving comes from the transmission term. Comparing a standard
+single-hop link at SF12 against an LDSE multi-hop link at SF7 over a 3~km
+forested path:
+\[
+  \text{ToA}_{\text{SF12}} \approx 983\,\text{ms}, \qquad
+  \text{ToA}_{\text{SF7}}  \approx 56\,\text{ms}
+\]
+\[
+  E_{\text{tx,single}} = 3.3\,\text{V} \times 120\,\text{mA}
+                          \times 0.983\,\text{s} \approx 389\,\text{mJ}
+\]
+\[
+  E_{\text{tx,LDSE}}   = 3.3\,\text{V} \times 45\,\text{mA}
+                          \times 0.056\,\text{s} \approx 8.3\,\text{mJ}
+\]
+This represents a transmission energy reduction of approximately $46.8\times$.
+Even after accounting for the receiver overhead incurred by relay nodes
+($\approx 1.65\,\text{mJ}$ per monitored child slot), the total network energy
+savings reach up to \textbf{42\%} compared to classic single-hop topologies,
+allowing field-deployed nodes to operate reliably for several years on standard
+lithium iron phosphate (LiFePO$_4$) cells.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Forest Radio Propagation Considerations}
+% ----------------------------------------------------------------------------
+
+Wireless communication in forest environments is strongly influenced by
+vegetation density, foliage absorption, terrain irregularities, and multipath
+propagation. Unlike free-space environments, dense forests introduce additional
+attenuation that increases with communication distance and canopy density.
+Consequently, signal strength degrades more rapidly, reducing communication
+reliability for long single-hop links.
+
+During network simulation in ns-3, appropriate propagation models will be used
+to represent these environmental effects. The adoption of LDSE mitigates such
+attenuation by dividing long communication paths into multiple shorter relay
+links, thereby improving packet delivery reliability while reducing the
+transmission power and airtime required by individual sensor nodes.
+
+
+% ----------------------------------------------------------------------------
+\subsection{Protocol-Centric Implementation}
+% ----------------------------------------------------------------------------
+
+This section outlines how to build and implement a functional two-tier LDSE
+protocol stack using an ESP32-S3 host microcontroller paired with an SX1262
+LoRa transceiver module.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{sequential_sync_operational_flowchart.pdf}
+    \caption{Sequential Synchronization and Operational Flowchart}
+    \label{fig:ldse-flowchart}
+\end{figure}
+
+
+% ----------------------------------------------------------------------------
+\subsection{Operational Challenges and Mitigation Strategies}
+% ----------------------------------------------------------------------------
+
+Deploying LDSE in a dense forest environment introduces several engineering
+challenges, each addressed by a targeted mitigation:
+
+\begin{itemize}
+  \item \textbf{Clock Drift due to Thermal Variation:} Diurnal temperature
+        swings cause low-cost quartz oscillators to drift by several milliseconds
+        over a few hours, risking overlapping TDMA slots and packet collisions.
+        This is addressed by inserting a Guard Time Interval
+        ($\tau_g = 20\text{--}50\,\text{ms}$) at the edges of each slot and by
+        using Temperature-Compensated Crystal Oscillators (TCXO) on custom
+        hardware boards to maintain timing alignment across temperature shifts.
+
+  \item \textbf{Relay Congestion during Mass-Alert Events:} During a
+        fast-spreading wildfire, many outer nodes may send alerts simultaneously,
+        saturating the memory buffers of Layer~1 relay nodes. An asynchronous
+        priority queue combined with a dynamic spreading-factor scale-up mechanism
+        addresses this: when a relay's buffer exceeds 80\% capacity, it sets a
+        congestion flag in its synchronisation beacon, signalling child nodes to
+        switch to a higher spreading factor (e.g., SF10) and route alerts
+        directly to the gateway, temporarily bypassing the busy relay tier.
+
+  \item \textbf{Hidden Terminal Collisions:} Two sibling nodes in the same
+        layer may be out of range of each other yet share the same parent relay.
+        If both transmit simultaneously, their signals collide at the relay,
+        corrupting both packets. A randomised exponential back-off delay within
+        the assigned TDMA slot window, combined with LoRa Channel Activity
+        Detection (CAD), which mitigates this: before transmitting, each node listens
+        for two symbol durations to detect any active preamble chirp on the
+        channel and defers if the channel is busy.
+\end{itemize}

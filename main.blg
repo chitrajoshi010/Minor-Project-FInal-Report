@@ -1,0 +1,104 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: section/Declaration.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: section/Certificate_of_Approval.aux
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+A level-1 auxiliary file: section/Copyright.aux
+Reallocating 'name_of_file' (item size: 1) to 28 items.
+A level-1 auxiliary file: section/acknowledgement.aux
+Reallocating 'name_of_file' (item size: 1) to 21 items.
+A level-1 auxiliary file: section/abstract.aux
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+A level-1 auxiliary file: section/lists.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+A level-1 auxiliary file: section/introduction.aux
+Reallocating 'name_of_file' (item size: 1) to 29 items.
+A level-1 auxiliary file: section/literaturereview.aux
+Reallocating 'name_of_file' (item size: 1) to 33 items.
+A level-1 auxiliary file: section/requirement_analysis.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: section/methodology.aux
+Reallocating 'name_of_file' (item size: 1) to 35 items.
+A level-1 auxiliary file: section/Implementation_details.aux
+Reallocating 'name_of_file' (item size: 1) to 32 items.
+A level-1 auxiliary file: section/result_and_analysis.aux
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+A level-1 auxiliary file: section/remaining_task.aux
+Reallocating 'name_of_file' (item size: 1) to 23 items.
+A level-1 auxiliary file: section/Conclusion.aux
+Reallocating 'name_of_file' (item size: 1) to 23 items.
+A level-1 auxiliary file: section/appendices.aux
+Reallocating 'name_of_file' (item size: 1) to 7 items.
+The style file: ieeetr.bst
+Reallocating 'name_of_file' (item size: 1) to 14 items.
+Database file #1: refrences/ref.bib
+Warning--entry type for "lorawan2015spec" isn't style-file defined
+--line 73 of file refrences/ref.bib
+Warning--empty journal in matinUnderstandingForestFire2017
+Warning--empty year in matinUnderstandingForestFire2017
+Warning--empty journal in mishraForestFirePattern2023
+Warning--empty year in mishraForestFirePattern2023
+Warning--empty journal in bhattaraiAnticipatoryForestfireRisk2026
+Warning--empty year in bhattaraiAnticipatoryForestfireRisk2026
+Warning--empty journal in rundel2009environmental
+Warning--empty year in rundel2009environmental
+Warning--empty journal in javaid2013energy
+Warning--empty year in javaid2013energy
+Warning--empty journal in li2025ldse
+Warning--empty year in li2025ldse
+Warning--empty journal in semtech2026lora
+Warning--empty year in semtech2026lora
+Warning--empty journal in haxhibeqiri2018survey
+Warning--empty year in haxhibeqiri2018survey
+Warning--empty journal in bandara2023forest
+Warning--empty year in bandara2023forest
+Warning--empty journal in patel2025forestguard
+Warning--empty year in patel2025forestguard
+Warning--empty year in saida2023lora
+Warning--empty journal in kahl2023fsc22
+Warning--empty year in kahl2023fsc22
+You've used 13 entries,
+            1876 wiz_defined-function locations,
+            558 strings with 6234 characters,
+and the built_in function-call counts, 3718 in all, are:
+= -- 323
+> -- 196
+< -- 0
++ -- 70
+- -- 57
+* -- 303
+:= -- 526
+add.period$ -- 11
+call.type$ -- 13
+change.case$ -- 13
+chr.to.int$ -- 0
+cite$ -- 36
+duplicate$ -- 193
+empty$ -- 313
+format.name$ -- 57
+if$ -- 875
+int.to.chr$ -- 0
+int.to.str$ -- 13
+missing$ -- 12
+newline$ -- 43
+num.names$ -- 13
+pop$ -- 72
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 139
+stack$ -- 0
+substring$ -- 180
+swap$ -- 79
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 23
+while$ -- 31
+width$ -- 15
+write$ -- 111
+(There were 24 warnings)

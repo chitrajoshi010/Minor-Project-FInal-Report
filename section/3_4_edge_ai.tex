@@ -1,0 +1,155 @@
+\subsection{Acoustic Dataset: FSC22}
+
+The acoustic threat classifier is trained on a curated subset of the FSC22
+(Forest Sound Classification 2022) dataset \cite{kahl2023fsc22}. FSC22
+contains 2,025 five-second audio clips across 27 sub-classes grouped under
+six broader categories, each holding 75 samples drawn from the Freesound
+library.
+
+For this project, FSC22 was narrowed to six project-relevant classes: Axe,
+Chainsaw, Gunshot, Handsaw, Tree Falling, and a merged Background class
+combining twelve non-threat sub-classes (rain, wind, stream, birds, insects,
+footsteps, and others). Table~\ref{tab:class-mapping} shows this mapping.
+All non-forest classes (Car, Train, Engine, Motorcycle, Helicopter, etc.)
+were excluded as out of scope.
+
+\begin{table}[H]
+    \centering
+    \caption{FSC22 sub-class to project-class mapping}
+    \label{tab:class-mapping}
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Project Class} & \textbf{Mapped FSC22 Sub-classes} \\
+        \midrule
+        Axe & Axe, Wood\_Chop \\
+        Chainsaw & Chainsaw, Sawing, Wood\_Sawing \\
+        Gunshot & Gunshot, Gunshot\_Other \\
+        Handsaw & Handsaw, Sawing, Wood\_Sawing \\
+        Tree Falling & Tree\_Falling, Wood\_Crack, Wood\_Creak \\
+        Background & Rain, Wind, Stream, Ocean, Crackling\_Fire, Steps, \\
+                    & Footwalk, Bird, Bird\_Other, Insects, Thunder, Church\_Bell \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Acoustic Feature Extraction}
+
+Raw 16~kHz audio is converted to a log-Mel spectrogram via a Hann window,
+FFT, and Mel filterbank, followed by per-frame normalisation. This
+time-frequency representation captures the harmonic content of chainsaw
+noise, the sharp transients of gunshots, and the impact profile of axe
+strikes.
+
+\subsection{Memory-Constrained Model Architecture Design}
+\label{subsec:model-evolution}
+
+Designing a CNN for on-device inference on the ESP32-S3 required an
+iterative architecture search, since the peak intermediate tensor size at
+each convolution layer must fit within the chip's 512~KB SRAM alongside the
+audio pipeline, FreeRTOS, and networking stack. Three architecture variants
+were designed, summarised in Table~\ref{tab:model-evolution}:
+
+\textbf{Full architecture:} 5.0~s audio, 128 Mel bands, filter widths
+$[32,64,64]$. The first convolution layer alone produces an intermediate
+tensor of approximately 2.05~MB -- more than four times the total SRAM
+budget, making this architecture undeployable regardless of quantization.
+
+\textbf{Compact architecture:} Audio duration halved to 2.5~s, Mel bands
+halved to 64, filters reduced to $[16,32,32]$, dense layer reduced to 64
+units. This reduces the peak intermediate tensor to approximately 257~KB --
+still impractical once the log-Mel buffer, FFT buffers, FreeRTOS, I2S DMA,
+and Wi-Fi stack overhead are accounted for.
+
+\textbf{Tiny architecture (selected for implementation):} Filters reduced
+further to $[8,16,32]$, and \texttt{GlobalAveragePooling2D} used in place of
+\texttt{Flatten}+\texttt{Dense} to avoid a large flattened feature vector.
+This reduces the peak intermediate tensor to approximately 128~KB, with a
+target tensor arena in the 90--212~KB range depending on safety margin.
+
+\begin{table}[H]
+    \centering
+    \caption{Model architecture design comparison}
+    \label{tab:model-evolution}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Parameter} & \textbf{Full} & \textbf{Compact} & \textbf{Tiny} \\
+        \midrule
+        Audio duration      & 5.0~s          & 2.5~s          & 2.5~s \\
+        Mel bands           & 128            & 64             & 64 \\
+        Conv filters        & [32, 64, 64]   & [16, 32, 32]   & [8, 16, 32] \\
+        Parameters (approx.)& 65{,}000       & 24{,}000       & 9{,}000 \\
+        Peak intermediate tensor & $\sim$2.05~MB & $\sim$257~KB & $\sim$128~KB \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Quantization Strategy}
+
+Post-training INT8 quantization is applied to each candidate model using
+TensorFlow Lite's converter, with a representative calibration dataset used
+to fix activation ranges ahead of deployment on target hardware. INT8
+quantization is required because the ESP32-S3 has no hardware floating-point
+acceleration suited to real-time CNN inference, and materially reduces both
+model size and inference latency compared to a float32 model.
+
+
+\subsection{On-Device Deployment Pipeline}
+
+Figure~\ref{fig:tinyml_pipeline} shows the firmware-level inference pipeline
+running on each forest node. The I2S peripheral captures 40{,}000 samples
+(2.5~s at 16~kHz) from an INMP441 MEMS microphone into a heap-allocated
+\texttt{int16\_t} ring buffer. This buffer is converted into a
+$64 \times 251$ log-Mel spectrogram (Hann window, 512-point FFT, 64-band Mel
+filterbank, log compression, per-frame normalisation), quantized to INT8
+using the input scale and zero-point 
+and passed to the TFLite Micro interpreter's \texttt{Invoke()} call. The
+raw INT8 output logits are dequantized back to float probabilities
+($\text{prob} = (\text{output}_i - \text{zp}) \times \text{scale}$), and the
+arg\-max class is taken as the detection result.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[
+            width=1.1\textwidth,
+            height=\textheight,
+            keepaspectratio
+        ]{audiopipeline.pdf}
+    }
+    \caption{On-device acoustic inference pipeline}
+    \label{fig:tinyml_pipeline}
+\end{figure}
+
+\subsection{Fire Risk Scoring}
+Instead of simple fixed threshold comparisons, each node computes a composite
+fire-risk score by multisensory fusion, measuring how much current sensor
+readings deviate from normal (calibrated) conditions.
+The principle is:
+\begin{itemize}
+    \item Normal forest conditions = stable temperature, CO$_2$, and
+    humidity.
+    \item Fire conditions = temperature spikes, CO$_2$ increases
+    dramatically, humidity drops.
+\end{itemize}
+The system calculates a normalized deviation score, and if it exceeds a
+threshold, it signals a fire.
+\begin{equation}
+    \text{FireRisk} = 0.51 \times \Delta CO_2 + 0.37 \times \Delta TEMP +
+    0.12 \times \Delta HUMIDITY
+\end{equation}
+What each part means:
+\begin{itemize}
+    \item $\Delta CO_2$ = (current CO$_2$ -- Calibrated CO$_2$) / standard
+    deviation of CO$_2$
+    \item $\Delta T$ = (current temp -- Calibrated temp) / standard deviation
+    of temp
+    \item $\Delta H$ = (current humidity -- Calibrated humidity) / standard
+    deviation of humidity
+\end{itemize}
+Weights (based on correlation with fire):
+\begin{itemize}
+    \item 0.51 (51\%) = CO$_2$ (highest correlation: 0.4842)
+    \item 0.37 (37\%) = Temperature (correlation: 0.3477)
+    \item 0.12 (12\%) = Humidity (lowest correlation: 0.10)
+\end{itemize}
+Fire likely detected: risk score is above 3.0 threshold.

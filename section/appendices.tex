@@ -1,0 +1,41 @@
+%------------------------------------------------
+% APPENDICES
+%------------------------------------------------
+
+\chapter{APPENDICES}
+\label{app:appendices}
+
+\section*{Appendix A: PROJECT SCHEDULE}
+\addcontentsline{toc}{section}{Appendix A: PROJECT SCHEDULE}
+\label{app:project_schedule}
+
+\input{section/6_project_schedule}
+
+
+%------------------------------------------------
+\section*{Appendix B: PROJECT BUDGET}
+\addcontentsline{toc}{section}{Appendix B: PROJECT BUDGET}
+\label{app:project_budget}
+
+\input{section/7_project_budget}
+
+
+%------------------------------------------------
+\section*{Appendix C: HARDWARE PROTOTYPE SETUP}
+\addcontentsline{toc}{section}{Appendix C: HARDWARE PROTOTYPE SETUP}
+\label{app:hardware_setup}
+
+The hardware implementation details of the proposed forest monitoring sensor
+node are presented in this appendix. The prototype consists of an ESP32-S3
+microcontroller, MEMS microphone, temperature and humidity sensor, gas sensor,
+and LoRa communication module.
+
+The complete hardware connection diagram of the sensor node is shown in
+Fig.~\ref{fig:hardware_setup}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{sensor_nodes.png}
+    \caption{Schematic diagram of the sensing layer.}
+    \label{fig:hardware_setup}
+\end{figure}

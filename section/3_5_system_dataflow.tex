@@ -1,0 +1,53 @@
+% ============================================================================
+%  section/3_5_system_dataflow.tex -- Section 3.5: System Data Flow
+%  and Section 3.6: Overall Working Principle
+% ============================================================================
+\section{System Data Flow}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{system_dataflow.png}
+    \caption{Proposed System Dataflow}
+    \label{fig:placeholder}
+\end{figure}
+\begin{enumerate}
+    \item \textbf{Sensing Layer:} Forest nodes maintain deep sleep
+    (approximately 7~$\mu$A draw). Nodes wake on a scheduled 10-minute timer
+    for environmental sampling, or immediately upon a MEMS microphone
+    An interrupt triggered by audio energy above the silence threshold.
+
+    \item \textbf{Edge Processing:} The ESP32-S3 wakes, reads MQ135 and
+    DHT22 sensors, and compute the RF fire-risk score. Simultaneously or
+    Upon a microphone interrupt, it captures a 5-second audio window, extracts
+    The Mel-spectrogram runs the quantized CNN inference. If either the
+    fire-risk score exceeds the safety threshold or the CNN inference
+    confidence exceeds the acoustic detection threshold (default 0.85), the
+    node forms a JSON alert packet containing node ID, GPS coordinates,
+    timestamp, risk score, and detected class label.
+
+    \item \textbf{Communication Layer:} The JSON alert packet is transmitted
+    over LoRa. If the node is within direct range of the gateway
+    ($<2$~km), The packet is sent directly. If beyond range, the
+    LDSE routing layer forwards the packet through intermediate relay nodes
+    in a multi-hop chain until it reaches the gateway.
+
+    \item \textbf{Gateway / Cloud Layer:} The ESP32-S3 gateway receives the
+    alert packet, performs optional secondary validation (duplicate
+    filtering, minimum confidence check), and forwards the structured alert
+    to the web dashboard over Wi-Fi for visualization and notification of
+    forest authorities.
+\end{enumerate}
+
+\section{Overall Working Principle}
+
+The network operates in a closed-loop, event-driven manner. Scheduled
+environmental sampling provides background fire-risk monitoring, while
+interrupt-driven acoustic wake-up enables immediate response to chainsaw,
+gunshot, or axe sounds. Edge inference before transmission ensures that only
+confirmed threat events generate network traffic, significantly reducing
+energy consumption compared to systems that stream raw sensor data
+continuously. LDSE synchronized sleep--relay cycles ensure that relay nodes
+are awake to forward packets precisely when needed, while remaining in deep
+sleep otherwise. The gateway publishes structured alerts to the web dashboard
+in real time, enabling forest rangers to identify the location and nature of
+each detected event and respond accordingly.

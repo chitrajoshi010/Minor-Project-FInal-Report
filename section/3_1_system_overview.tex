@@ -1,0 +1,19 @@
+% ============================================================================
+%  section/3_1_system_overview.tex -- Section 3.1: System Overview and
+%  Architecture
+% ============================================================================
+\section{System Overview and Architecture}
+
+The proposed system follows four layers: Sensing, Edge Processing,
+Communication, and Gateway/Cloud. Two forest nodes monitor the environment
+continuously while most hardware components remain in deep sleep to conserve
+energy. Nodes wake on a scheduled timer or upon detection of a significant
+acoustic or environmental event. Figure~\ref{fig:architecture} shows the
+layered architecture of the system.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{system_architecture.png}
+    \caption{Proposed System Architecture}
+    \label{fig:architecture}
+\end{figure}

@@ -1,0 +1,77 @@
+\contentsline {chapter}{DECLARATION}{i}{chapter*.1}%
+\contentsline {chapter}{CERTIFICATE OF APPROVAL}{ii}{chapter*.2}%
+\contentsline {chapter}{COPYRIGHT}{iii}{chapter*.3}%
+\contentsline {chapter}{ACKNOWLEDGEMENT}{iv}{chapter*.4}%
+\contentsline {chapter}{ABSTRACT}{v}{chapter*.5}%
+\contentsline {chapter}{List of Figures}{viii}{chapter*.6}%
+\contentsline {chapter}{List of Tables}{ix}{chapter*.7}%
+\contentsline {chapter}{List of Abbreviations}{x}{chapter*.9}%
+\contentsline {chapter}{\numberline {1}INTRODUCTION}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Motivation}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Problem Definition}{3}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Objectives}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Report Organization}{4}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Scope and Applications}{5}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}Scope}{5}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}Applications}{6}{subsection.1.6.2}%
+\contentsline {chapter}{\numberline {2}LITERATURE REVIEW}{7}{chapter.2}%
+\contentsline {chapter}{\numberline {3}REQUIREMENT ANALYSIS}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Hardware Requirements}{11}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Software Requirements}{11}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Feasibility Study}{13}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Technical Feasibility:}{13}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Economic Feasibility:}{13}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Operational Feasibility:}{13}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Time Feasibility:}{14}{subsection.3.3.4}%
+\contentsline {chapter}{\numberline {4}SYSTEM ARCHITECTURE AND METHODOLOGY}{15}{chapter.4}%
+\contentsline {section}{\numberline {4.1}System Overview and Architecture}{15}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Communication System Design}{15}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}LoRa Communication Fundamentals}{16}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}LoRa Communication Parameters}{16}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Conventional LoRaWAN Architecture}{17}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Limitations of Conventional LoRaWAN}{18}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}LDSE Protocol Overview}{18}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Architecture of LDSE}{18}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Time Synchronization and Epoch Structure}{19}{subsection.4.2.7}%
+\contentsline {subsection}{\numberline {4.2.8}Parent Selection and Routing Mechanism}{20}{subsection.4.2.8}%
+\contentsline {subsection}{\numberline {4.2.9}Multi-Channel Communication}{20}{subsection.4.2.9}%
+\contentsline {subsection}{\numberline {4.2.10}Power Consumption Model}{21}{subsection.4.2.10}%
+\contentsline {subsection}{\numberline {4.2.11}Forest Radio Propagation Considerations}{21}{subsection.4.2.11}%
+\contentsline {subsection}{\numberline {4.2.12}Protocol-Centric Implementation}{22}{subsection.4.2.12}%
+\contentsline {subsection}{\numberline {4.2.13}Operational Challenges and Mitigation Strategies}{22}{subsection.4.2.13}%
+\contentsline {subsection}{\numberline {4.2.14}Acoustic Dataset: FSC22}{23}{subsection.4.2.14}%
+\contentsline {subsection}{\numberline {4.2.15}Acoustic Feature Extraction}{24}{subsection.4.2.15}%
+\contentsline {subsection}{\numberline {4.2.16}Memory-Constrained Model Architecture Design}{24}{subsection.4.2.16}%
+\contentsline {subsection}{\numberline {4.2.17}Quantization Strategy}{25}{subsection.4.2.17}%
+\contentsline {subsection}{\numberline {4.2.18}On-Device Deployment Pipeline}{26}{subsection.4.2.18}%
+\contentsline {subsection}{\numberline {4.2.19}Fire Risk Scoring}{28}{subsection.4.2.19}%
+\contentsline {section}{\numberline {4.3}System Data Flow}{29}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Overall Working Principle}{30}{section.4.4}%
+\contentsline {chapter}{\numberline {5}IMPLEMENTATION DETAILS}{31}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Acoustic Threat Detection Implementation}{31}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Training Pipeline}{31}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}INT8 Quantization}{32}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}LoRa Network Simulation Implementation}{33}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Basic LoRa Node Communication Implementation}{35}{subsection.5.2.1}%
+\contentsline {chapter}{\numberline {6}RESULT AND ANALYSIS}{37}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Environmental Sensor-Based Fire Risk Assessment}{37}{section.6.1}%
+\contentsline {section}{\numberline {6.2}LoRa Communication Simulation Results}{37}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Current Limitations}{38}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Current Project Progress}{39}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Acoustic Threat Detection Results}{39}{section.6.5}%
+\contentsline {chapter}{\numberline {7}FUTURE ENHANCEMENTS}{42}{chapter.7}%
+\contentsline {subsubsection}{Edge Hardware and Sensor Integration}{42}{subsubsection*.28}%
+\contentsline {subsubsection}{Acoustic Preprocessing and Model Deployment}{42}{subsubsection*.29}%
+\contentsline {subsubsection}{Fire Risk Algorithm and Sensor Fusion}{43}{subsubsection*.30}%
+\contentsline {subsubsection}{Gateway and Dashboard Setup}{43}{subsubsection*.31}%
+\contentsline {subsubsection}{ns-3 Environment Setup and Channel Modeling}{43}{subsubsection*.32}%
+\contentsline {subsubsection}{LDSE Protocol Implementation}{44}{subsubsection*.33}%
+\contentsline {subsubsection}{Performance Evaluation and Comparative Analysis}{44}{subsubsection*.34}%
+\contentsline {chapter}{\numberline {8}CONCLUSION}{46}{chapter.8}%
+\contentsline {chapter}{\numberline {9}APPENDICES}{47}{chapter.9}%
+\contentsline {section}{Appendix A: PROJECT SCHEDULE}{47}{section*.35}%
+\contentsline {section}{Appendix B: PROJECT BUDGET}{48}{table.caption.36}%
+\contentsline {section}{Appendix C: HARDWARE PROTOTYPE SETUP}{49}{table.caption.37}%
+\contentsline {chapter}{REFERENCES}{51}{chapter*.39}%
+\contentsfinish 

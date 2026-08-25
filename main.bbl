@@ -1,0 +1,63 @@
+\begin{thebibliography}{10}
+
+\bibitem{matinUnderstandingForestFire2017}
+M.~A. Matin, V.~S. Chitale, M.~S.~R. Murthy, K.~Uddin, B.~Bajracharya, and
+  S.~Pradhan, ``Understanding forest fire patterns and risk in nepal using
+  remote sensing, geographic information system and historical fire data,''
+  vol.~26, no.~4, pp.~276--286.
+
+\bibitem{mishraForestFirePattern2023}
+B.~Mishra, S.~Panthi, S.~Poudel, and B.~Ghimire, ``Forest fire pattern and
+  vulnerability mapping using deep learning in nepal,'' vol.~19, p.~3.
+
+\bibitem{bhattaraiAnticipatoryForestfireRisk2026}
+B.~Bhattarai, K.~Shrestha, P.~Gurung, P.~Sapkota, and H.~Ojha, ``Anticipatory
+  forest-fire risk governance in nepal,'' vol.~26, pp.~142--154.
+
+\bibitem{rundel2009environmental}
+P.~W. Rundel, E.~A. Graham, M.~F. Allen, J.~C. Fisher, and T.~C. Harmon,
+  ``Environmental sensor networks in ecological research,'' vol.~182, no.~3,
+  pp.~589--607.
+
+\bibitem{javaid2013energy}
+N.~Javaid, S.~Hayat, M.~Shakir, M.~A. Khan, S.~H. Bouk, and Z.~A. Khan,
+  ``Energy efficient {MAC} protocols in wireless body area sensor networks - a
+  survey,''
+
+\bibitem{li2025ldse}
+Z.~Li, X.~Li, and J.~Shang, ``Forest fire monitoring and energy optimization
+  based on {LoRa}-mesh wireless communication technology,'' vol.~14, no.~21,
+  p.~4135.
+
+\bibitem{semtech2026lora}
+{Semtech Corporation}, ``Semtech {LoRa} technology overview,''
+
+\bibitem{lorawan2015spec}
+N.~Sornin, M.~Luis, T.~Eirich, T.~Kramp, and O.~Hersent, ``{LoRaWAN}
+  specification.''
+\newblock Version number: V1.0.
+
+\bibitem{haxhibeqiri2018survey}
+J.~Haxhibeqiri, E.~De~Poorter, I.~Moerman, and J.~Hoebeke, ``A survey of
+  {LoRaWAN} for {IoT}: From technology to application,'' vol.~18, no.~11,
+  p.~3995.
+
+\bibitem{bandara2023forest}
+M.~Bandara, R.~Jayasundara, I.~Ariyarathne, D.~Meedeniya, and C.~Perera,
+  ``Forest sound classification dataset: {FSC}22,'' vol.~23, no.~4, p.~2032.
+
+\bibitem{patel2025forestguard}
+A.~K. Patel, P.~Parikh, and P.~Shah, ``{ForestGuard}: An {IP}66 edge-{AI}
+  raspberry pi node for illegal logging and early fire/smoke detection,''
+  vol.~16, no.~2, pp.~1486--1500.
+
+\bibitem{saida2023lora}
+A.~Saida, C.~Sreedhar, {Samreen}, A.~Mohamma, K.~Jamal, and M.~Ghalwan,
+  ``{LORA} based forest fire monitoring system,'' in {\em E3S web of
+  conferences}, vol.~430, p.~01171, {EDP} Sciences.
+
+\bibitem{kahl2023fsc22}
+S.~Kahl, C.~Wood, M.~Eibl, and H.~Klinck, ``{FSC}22: A dataset for forest sound
+  classification,'' vol.~23, no.~4, p.~2032.
+
+\end{thebibliography}

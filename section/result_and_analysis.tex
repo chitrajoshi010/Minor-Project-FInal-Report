@@ -1,0 +1,185 @@
+\chapter{RESULT AND ANALYSIS}
+\section{Environmental Sensor-Based Fire Risk Assessment}
+
+The developed sensor prototype was tested under different environmental conditions
+to verify the fire risk estimation mechanism.
+
+The sensor node successfully collected temperature, humidity, and gas concentration
+data and generated a corresponding fire risk score.
+
+Example observations obtained from testing are shown in Table~\ref{tab:risk}.
+
+
+\begin{table}[h]
+\centering
+\caption{Environmental Sensor Testing Results}
+\label{tab:risk}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Condition & Temperature & Humidity & Gas Level & Risk Level\\
+\hline
+Normal Environment & Low & High & Low & Low\\
+\hline
+Warm and Dry & Medium & Medium & Medium & Moderate\\
+\hline
+Smoke Exposure & High & Low & High & High\\
+\hline
+\end{tabular}
+\end{table}
+
+
+The results indicate that combining multiple sensor parameters provides a more
+reliable indication of fire risk compared to individual sensor threshold methods.
+The sensor fusion approach reduces false alarms caused by temporary variations in
+a single environmental parameter.
+
+\section{LoRa Communication Simulation Results}
+
+The LoRa communication simulation successfully demonstrated packet transmission
+between LoRa sensor nodes using the FLORA framework.
+
+The implemented simulation verified:
+
+\begin{itemize}
+    \item Successful packet transmission between LoRa nodes.
+    \item Reception of packets at the LoRa gateway.
+    \item Basic wireless communication functionality.
+\end{itemize}
+
+The simulation confirms that the FLORA and INET-based environment can be used for
+evaluating the proposed forest monitoring network.
+
+The future simulation work will include:
+
+\begin{itemize}
+    \item Implementation of LDSE multi-hop routing protocol.
+    \item Energy consumption analysis.
+    \item Packet delivery ratio evaluation.
+    \item Network scalability testing.
+    \item Performance comparison with existing routing approaches.
+\end{itemize}
+
+
+\section{Current Limitations}
+
+Although the initial prototype and simulation environment have been successfully
+developed, some components of the complete system are still under development.
+
+The remaining tasks include:
+
+\begin{itemize}
+    \item Deployment of TinyML-based acoustic classification model.
+    \item Implementation of LDSE routing protocol.
+    \item Hardware-based LoRa communication testing.
+    \item Cloud dashboard integration.
+    \item Large-scale network simulation.
+\end{itemize}
+
+
+\section{Current Project Progress}
+
+\begin{table}[H]
+\centering
+\caption{Current Project Status}
+\begin{tabular}{|c|c|}
+\hline
+Module & Status\\
+\hline
+ESP32-S3 Sensor Node & Completed\\
+\hline
+Temperature/Humidity/Gas Sensing & Completed\\
+\hline
+Fire Risk Score Calculation & Completed\\
+\hline
+Acoustic Data Acquisition & Completed\\
+\hline
+TinyML Sound Classification & In Progress\\
+\hline
+LoRa Hardware Communication & In Progress\\
+\hline
+FLORA LoRa Simulation & Completed\\
+\hline
+LDSE Routing Protocol & Future Work\\
+\hline
+Web Dashboard & Future Work\\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\section{Acoustic Threat Detection Results}
+
+The deployed \texttt{tiny\_int8.tflite} model was evaluated on the held-out
+FSC22 test split (240 samples, stratified across the 6 project classes). The
+model achieved an overall accuracy of \textbf{87.92\%} (211/240 correct) and
+a micro-averaged AUC-ROC of \textbf{0.9811}, exceeding the full model's
+INT8 accuracy of 86.67\% despite using roughly 7$\times$ fewer parameters
+(Section~\ref{subsec:model-evolution}).
+
+Table~\ref{tab:classification-report} reports precision, recall, and
+F1-score per class. Background -- the majority class with 165 test samples
+-- is classified with very high precision and recall (0.9398 / 0.9455),
+which is the desired behaviour for a safety-critical detector, since false
+positives on background would generate nuisance alerts.
+
+\begin{table}[H]
+    \centering
+    \caption{Classification report -- Tiny INT8 model on FSC22 test split}
+    \label{tab:classification-report}
+    \begin{tabular}{lccccc}
+        \toprule
+        \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-score} & \textbf{Support} \\
+        \midrule
+        axe          & 0.7692 & 0.6667 & 0.7143 & 15 \\
+        background   & 0.9398 & 0.9455 & 0.9426 & 165 \\
+        chainsaw     & 0.8462 & 0.7333 & 0.7857 & 15 \\
+        gunshot      & 0.6500 & 0.8667 & 0.7429 & 15 \\
+        handsaw      & 1.0000 & 0.8000 & 0.8889 & 15 \\
+        tree\_falling & 0.5625 & 0.6000 & 0.5806 & 15 \\
+        \midrule
+        \textbf{Accuracy} & \multicolumn{3}{c}{0.8792} & 240 \\
+        Macro avg    & 0.7946 & 0.7687 & 0.7758 & 240 \\
+        Weighted avg & 0.8853 & 0.8792 & 0.8801 & 240 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Figure~\ref{fig:prf-chart} visualises the same precision, recall, and
+F1-score values, making the weaker classes easier to spot at a glance:
+handsaw's recall gap (1.000 precision vs.\ 0.800 recall), gunshot's
+precision gap (0.650 precision vs.\ 0.867 recall) -- suggesting the model
+is currently biased toward flagging ambiguous impulsive sounds as gunshots
+rather than missing them, an acceptable trade-off for a security
+application -- and tree\_falling's overall weakness across all three
+metrics.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{tinyml_precision_recall_f1.png}
+    \caption{Per-class precision, recall, and F1-score for the deployed
+    tiny model}
+    \label{fig:prf-chart}
+\end{figure}
+
+Figure~\ref{fig:confusion-matrix} shows the confusion matrix underlying
+these scores. Tree falling's weak F1-score (0.5806) is driven mainly by
+confusion with background: five of fifteen tree-falling clips were
+misclassified as background, plausibly because the low-frequency
+crack/creak signature of a falling tree overlaps with wind and ambient
+forest noise, and because tree falling has the smallest test support (15
+samples) of any class.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{tinyml_confusion_matrix.png}
+    \caption{Confusion matrix for the deployed tiny INT8 model)}
+    \label{fig:confusion-matrix}
+\end{figure}
+
+Despite this per-class variation, the model separates every class from the
+rest well in ranking terms, achieving a micro-averaged AUC-ROC of 0.9811 and
+a per-class one-vs-rest AUC no lower than 0.9384 (gunshot) -- indicating
+that the confidence threshold, rather than the model's underlying
+discriminative power, is the primary lever for improving the weaker classes
+before final deployment.

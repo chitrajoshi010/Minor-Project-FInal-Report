@@ -1,0 +1,53 @@
+% ============================================================================
+%  frontmatter/lists.tex -- Table of Contents, List of Figures,
+%                           List of Tables, List of Abbreviations
+% ============================================================================
+
+% --- Table of Contents ------------------------------------------------------
+{\setstretch{1}\setlength{\parskip}{0pt}\titlespacing*{\chapter}{0pt}{-11.2pt}{12pt}\tableofcontents}
+\clearpage
+
+% --- List of Figures --------------------------------------------------------
+\addcontentsline{toc}{chapter}{List of Figures}
+{\setstretch{1}\setlength{\parskip}{0pt}\titlespacing*{\chapter}{0pt}{-11.2pt}{12pt}\listoffigures}
+\clearpage
+
+% --- List of Tables ---------------------------------------------------------
+\addcontentsline{toc}{chapter}{List of Tables}
+{\setstretch{1}\setlength{\parskip}{0pt}\titlespacing*{\chapter}{0pt}{-11.2pt}{12pt}\listoftables}
+\clearpage
+
+% --- List of Abbreviations --------------------------------------------------
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+
+\begin{spacing}{1.5}
+\begin{longtable}{@{}p{3.5cm}p{10.5cm}@{}}
+AI        & Artificial Intelligence \\
+CNN       & Convolutional Neural Network \\
+DHT22     & Digital Humidity and Temperature Sensor (Model 22) \\
+DSP       & Digital Signal Processing \\
+ESP32-S3  & Espressif Systems 32-bit Microcontroller (Series 3) \\
+FSC22     & Forest Sound Classification Dataset 2022 \\
+FTSP      & Flooding Time Synchronization Protocol \\
+int8      & 8-bit Integer Quantization \\
+IoT       & Internet of Things \\
+IRE       & Implicit Route Exploration \\
+JSON      & JavaScript Object Notation \\
+LDSE      & Layered Dynamic Synchronization Energy-saving \\
+LoRa      & Long Range (radio modulation technology) \\
+LoRaWAN   & Long Range Wide Area Network \\
+MEMS      & Micro-Electro-Mechanical Systems \\
+MFCC      & Mel-Frequency Cepstral Coefficient \\
+MHz       & Megahertz \\
+ML        & Machine Learning \\
+MQ135     & Air Quality Sensor Module (Model 135) \\
+RF        & Random Forest \\
+SX1278    & Semtech LoRa Transceiver (Model 1278) \\
+TFLite    & TensorFlow Lite \\
+TinyML    & Tiny Machine Learning \\
+WSN       & Wireless Sensor Network \\
+\end{longtable}
+\end{spacing}
+
+\clearpage
