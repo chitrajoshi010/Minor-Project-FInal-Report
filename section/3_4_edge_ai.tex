@@ -94,6 +94,77 @@ target tensor arena in the 90--212~KB range depending on safety margin.
     \end{tabular}
 \end{table}
 
+\subsection{CNN Architecture}
+\label{subsec:cnn-architecture}
+
+The deployed Tiny model is a compact convolutional neural network that
+maps a single $64 \times 251 \times 1$ log-Mel spectrogram to a probability
+distribution over the five project classes (axe, chainsaw, gunshot,
+handsaw, background). It consists of three convolutional blocks followed
+by a lightweight classification head, summarised in
+Table~\ref{tab:cnn-layers} and illustrated in
+Figure~\ref{fig:cnn-block-diagram}.
+
+Each convolutional block applies a $3\times3$ \texttt{Conv2D} layer with
+\texttt{same} padding (so the spatial resolution is unchanged by the
+convolution itself), followed by \texttt{BatchNormalization} to stabilise
+activation statistics during training, a ReLU non-linearity, and a
+$2\times2$ \texttt{MaxPooling2D} layer that halves both spatial dimensions.
+The three blocks progressively widen the channel dimension
+($8 \rightarrow 16 \rightarrow 32$ filters) while shrinking the
+frequency-time resolution from $64\times251$ down to $8\times31$, following
+the standard CNN design pattern of trading spatial resolution for feature
+depth.
+
+Rather than flattening the final $8\times31\times32$ feature map into a
+large fully-connected layer -- which would require a
+$8\times31\times32=7{,}936$-element weight vector per output neuron --
+the network applies \texttt{GlobalAveragePooling2D}, collapsing each of the
+32 channels to a single average value. This keeps the head of the network
+small (a 32-element vector) regardless of the spectrogram's time-frequency
+resolution, which is what makes the \texttt{Tiny} variant deployable within
+the ESP32-S3's memory budget (Section~\ref{subsec:model-evolution}). A
+\texttt{Dense(64)} layer with ReLU activation and \texttt{Dropout(0.25)}
+forms the hidden classification layer, and a final \texttt{Dense(5)} layer
+with softmax activation produces the class probabilities. In total the
+network has approximately 8,500 trainable parameters (rounded to
+$\sim$9,000 in Table~\ref{tab:model-evolution}), the great majority of
+which are concentrated in the third convolutional layer and the first
+dense layer.
+
+\begin{table}[H]
+    \centering
+    \caption{Layer-by-layer summary of the deployed Tiny CNN}
+    \label{tab:cnn-layers}
+    \begin{tabular}{llcc}
+        \toprule
+        \textbf{Layer} & \textbf{Type} & \textbf{Output Shape} & \textbf{Parameters} \\
+        \midrule
+        Input        & Log-Mel spectrogram                & $64\times251\times1$ & -- \\
+        Conv Block 1 & Conv2D(8, $3\times3$) + BN + ReLU   & $64\times251\times8$ & 112 \\
+                     & MaxPool2D($2\times2$)               & $32\times125\times8$ & 0 \\
+        Conv Block 2 & Conv2D(16, $3\times3$) + BN + ReLU  & $32\times125\times16$ & 1{,}232 \\
+                     & MaxPool2D($2\times2$)               & $16\times62\times16$ & 0 \\
+        Conv Block 3 & Conv2D(32, $3\times3$) + BN + ReLU  & $16\times62\times32$ & 4{,}768 \\
+                     & MaxPool2D($2\times2$)               & $8\times31\times32$ & 0 \\
+        Head         & GlobalAveragePooling2D              & $32$ & 0 \\
+                     & Dense(64) + ReLU                    & $64$ & 2{,}112 \\
+                     & Dropout($p=0.25$)                   & $64$ & 0 \\
+                     & Dense(5) + Softmax                  & $5$ & 325 \\
+        \midrule
+        \textbf{Total} & & & $\sim$8{,}549 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{cnn_block_diagram.png}
+    \caption{Block diagram of the deployed Tiny CNN, showing the three
+    convolutional blocks and the classification head}
+    \label{fig:cnn-block-diagram}
+\end{figure}
+
 \subsection{Quantization Strategy}
 
 Post-training INT8 quantization is applied to each candidate model using

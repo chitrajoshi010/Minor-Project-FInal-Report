@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.12)  25 AUG 2026 12:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.8.12)  25 AUG 2026 14:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -626,7 +626,7 @@ Package hyperref Info: Link coloring OFF on input line 136.
 \openout3 = `main.out'.
 
  (./section/cover.tex
-<./Graphics/tu_logo.png, id=281, 636.6987pt x 752.0898pt>
+<./Graphics/tu_logo.png, id=285, 636.6987pt x 752.0898pt>
 File: ./Graphics/tu_logo.png Graphic file (type png)
 <use ./Graphics/tu_logo.png>
 Package pdftex.def Info: ./Graphics/tu_logo.png  used on input line 5.
@@ -816,7 +816,7 @@ n-tal mon-i-tor-ing, lo-cal edge-
  (./section/methodology.tex
 Chapter 4.
 (./section/3_1_system_overview.tex
-<./Graphics/system_architecture.png, id=554, 2285.53876pt x 1315.91624pt>
+<./Graphics/system_architecture.png, id=566, 2285.53876pt x 1315.91624pt>
 File: ./Graphics/system_architecture.png Graphic file (type png)
 <use ./Graphics/system_architecture.png>
 Package pdftex.def Info: ./Graphics/system_architecture.png  used on input line
@@ -838,7 +838,7 @@ i-ca-tion range un-der open-
 
 pdfTeX warning: pdflatex (file ./Graphics/ldse_protocol_network_hierarchy.pdf):
  PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<./Graphics/ldse_protocol_network_hierarchy.pdf, id=572, 253.90858pt x 233.9139
+<./Graphics/ldse_protocol_network_hierarchy.pdf, id=584, 253.90858pt x 233.9139
 pt>
 File: ./Graphics/ldse_protocol_network_hierarchy.pdf Graphic file (type pdf)
 <use ./Graphics/ldse_protocol_network_hierarchy.pdf>
@@ -846,7 +846,7 @@ Package pdftex.def Info: ./Graphics/ldse_protocol_network_hierarchy.pdf  used o
 n input line 136.
 (pdftex.def)             Requested size: 195.91196pt x 180.48544pt.
 [18]
-<./Graphics/ldse_protocol_epoch_structure.png, id=578, 361.35pt x 120.14888pt>
+<./Graphics/ldse_protocol_epoch_structure.png, id=590, 361.35pt x 120.14888pt>
 File: ./Graphics/ldse_protocol_epoch_structure.png Graphic file (type png)
 <use ./Graphics/ldse_protocol_epoch_structure.png>
 Package pdftex.def Info: ./Graphics/ldse_protocol_epoch_structure.png  used on 
@@ -858,7 +858,7 @@ tocol_epoch_structure.png>] [21]
 pdfTeX warning: pdflatex (file ./Graphics/sequential_sync_operational_flowchart
 .pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowe
 d
-<./Graphics/sequential_sync_operational_flowchart.pdf, id=610, 558.16531pt x 58
+<./Graphics/sequential_sync_operational_flowchart.pdf, id=622, 558.16531pt x 58
 7.3142pt>
 File: ./Graphics/sequential_sync_operational_flowchart.pdf Graphic file (type p
 df)
@@ -868,88 +868,102 @@ used on input line 281.
 (pdftex.def)             Requested size: 354.31049pt x 372.81491pt.
 [22 <./Graphics/sequential_sync_operational_flowchart.pdf>])
 (./section/3_4_edge_ai.tex [23] [24] [25]
+Overfull \hbox (38.16203pt too wide) in paragraph at lines 108--118
+\OT1/ptm/m/n/12 to sta-bilise ac-ti-va-tion statis-tics dur-ing train-ing, a Re
+LU non-linearity, and a $\OT1/ztmcm/m/n/12 2 \OMS/ztmcm/m/n/12 ^^B \OT1/ztmcm/m
+/n/12 2$ \OT1/cmtt/m/n/12 MaxPooling2D
+ []
+
+[26]
+<./Graphics/cnn_block_diagram.png, id=670, 639.5895pt x 278.2395pt>
+File: ./Graphics/cnn_block_diagram.png Graphic file (type png)
+<use ./Graphics/cnn_block_diagram.png>
+Package pdftex.def Info: ./Graphics/cnn_block_diagram.png  used on input line 1
+62.
+(pdftex.def)             Requested size: 416.83289pt x 181.33752pt.
+ [27 <./Graphics/cnn_block_diagram.png (PNG copy)>]
 
 pdfTeX warning: pdflatex (file ./Graphics/audiopipeline.pdf): PDF inclusion: fo
 und PDF version <1.7>, but at most version <1.5> allowed
-<./Graphics/audiopipeline.pdf, id=651, 597.19106pt x 845.07718pt>
+<./Graphics/audiopipeline.pdf, id=676, 597.19106pt x 845.07718pt>
 File: ./Graphics/audiopipeline.pdf Graphic file (type pdf)
 <use ./Graphics/audiopipeline.pdf>
-Package pdftex.def Info: ./Graphics/audiopipeline.pdf  used on input line 129.
+Package pdftex.def Info: ./Graphics/audiopipeline.pdf  used on input line 200.
 (pdftex.def)             Requested size: 458.51724pt x 648.84169pt.
-[26] [27 <./Graphics/audiopipeline.pdf>]
-Overfull \hbox (0.50552pt too wide) in paragraph at lines 142--144
+[28] [29 <./Graphics/audiopipeline.pdf>]
+Overfull \hbox (0.50552pt too wide) in paragraph at lines 213--215
 []\OT1/ptm/m/n/12 Fire con-di-tions = tem-per-a-ture spikes, CO$[]$ in-creases 
 dra-mat-i-cally, hu-mid-ity drops. 
  []
 
 ) (./section/3_5_system_dataflow.tex
-<./Graphics/system_dataflow.png, id=677, 280.1667pt x 298.2342pt>
+<./Graphics/system_dataflow.png, id=702, 280.1667pt x 298.2342pt>
 File: ./Graphics/system_dataflow.png Graphic file (type png)
 <use ./Graphics/system_dataflow.png>
 Package pdftex.def Info: ./Graphics/system_dataflow.png  used on input line 9.
 (pdftex.def)             Requested size: 291.78174pt x 310.60677pt.
- [28] [29 <./Graphics/system_dataflow.png>]) [30])
+ [30] [31 <./Graphics/system_dataflow.png>]) [32])
 \openout2 = `section/Implementation_details.aux'.
 
  (./section/Implementation_details.tex
 Chapter 5.
-<./Graphics/example_spectrograms.png, id=699, 1300.86pt x 722.7pt>
+<./Graphics/example_spectrograms.png, id=725, 1300.86pt x 722.7pt>
 File: ./Graphics/example_spectrograms.png Graphic file (type png)
 <use ./Graphics/example_spectrograms.png>
 Package pdftex.def Info: ./Graphics/example_spectrograms.png  used on input lin
 e 36.
 (pdftex.def)             Requested size: 354.31049pt x 196.84087pt.
-[31
+[33
 
 
 
 
 
 ]
-Overfull \hbox (2.09508pt too wide) in paragraph at lines 50--53
+Overfull \hbox (2.09508pt too wide) in paragraph at lines 52--55
 \OT1/ptm/m/n/12 Each trained model was quan-tized to 8-bit in-te-gers us-ing Te
 n-sor-Flow Lite's post-training
  []
 
-[32 <./Graphics/example_spectrograms.png>] [33]
-<./Graphics/lora_simulation.png, id=718, 398.6895pt x 246.9225pt>
+[34 <./Graphics/example_spectrograms.png>] [35]
+<./Graphics/lora_simulation.png, id=745, 398.6895pt x 246.9225pt>
 File: ./Graphics/lora_simulation.png Graphic file (type png)
 <use ./Graphics/lora_simulation.png>
-Package pdftex.def Info: ./Graphics/lora_simulation.png  used on input line 153
+Package pdftex.def Info: ./Graphics/lora_simulation.png  used on input line 155
 .
 (pdftex.def)             Requested size: 312.62466pt x 193.61981pt.
- [34] [35 <./Graphics/lora_simulation.png>]
-<./Graphics/two_node_lora.png, id=740, 617.30624pt x 272.217pt>
+ [36] [37 <./Graphics/lora_simulation.png>]
+<./Graphics/two_node_lora.png, id=767, 617.30624pt x 272.217pt>
 File: ./Graphics/two_node_lora.png Graphic file (type png)
 <use ./Graphics/two_node_lora.png>
-Package pdftex.def Info: ./Graphics/two_node_lora.png  used on input line 195.
+Package pdftex.def Info: ./Graphics/two_node_lora.png  used on input line 197.
 (pdftex.def)             Requested size: 312.62466pt x 137.86101pt.
-) [36 <./Graphics/two_node_lora.png>]
+) [38 <./Graphics/two_node_lora.png>]
 \openout2 = `section/result_and_analysis.aux'.
 
 
 (./section/result_and_analysis.tex
 Chapter 6.
-[37
+[39
 
 
 
 
-] [38] [39]
-<./Graphics/tinyml_precision_recall_f1.png, id=764, 794.97pt x 433.62pt>
+] [40] [41]
+<./Graphics/tinyml_precision_recall_f1.png, id=790, 794.97pt x 433.62pt>
 File: ./Graphics/tinyml_precision_recall_f1.png Graphic file (type png)
 <use ./Graphics/tinyml_precision_recall_f1.png>
 Package pdftex.def Info: ./Graphics/tinyml_precision_recall_f1.png  used on inp
 ut line 160.
 (pdftex.def)             Requested size: 354.31049pt x 193.26134pt.
- [40 <./Graphics/tinyml_precision_recall_f1.png>]
-<./Graphics/tinyml_confusion_matrix.png, id=771, 1084.05pt x 433.62pt>
+ [42 <./Graphics/tinyml_precision_recall_f1.png>]
+<./Graphics/tinyml_confusion_matrix.png, id=797, 1084.05pt x 433.62pt>
 File: ./Graphics/tinyml_confusion_matrix.png Graphic file (type png)
 <use ./Graphics/tinyml_confusion_matrix.png>
 Package pdftex.def Info: ./Graphics/tinyml_confusion_matrix.png  used on input 
 line 178.
 (pdftex.def)             Requested size: 300.12018pt x 120.04977pt.
-) [41 <./Graphics/tinyml_confusion_matrix.png>]
+) [43 <./Graphics/tinyml_confusion_matrix.png>]
 \openout2 = `section/remaining_task.aux'.
 
  (./section/remaining_task.tex
@@ -960,17 +974,17 @@ Overfull \hbox (0.24641pt too wide) in paragraph at lines 39--44
 l-filterbank) match-
  []
 
-[42
+[44
 
 
 
 
-] [43] [44]) [45]
+] [45] [46]) [47]
 \openout2 = `section/Conclusion.aux'.
 
  (./section/Conclusion.tex
 Chapter 8.
-) [46
+) [48
 
 
 
@@ -985,33 +999,33 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 9.
 
 (./section/6_project_schedule.tex
-<./Graphics/gantt_chart.png, id=805, 542.463pt x 330.69pt>
+<./Graphics/gantt_chart.png, id=831, 542.463pt x 330.69pt>
 File: ./Graphics/gantt_chart.png Graphic file (type png)
 <use ./Graphics/gantt_chart.png>
 Package pdftex.def Info: ./Graphics/gantt_chart.png  used on input line 10.
 (pdftex.def)             Requested size: 416.83289pt x 254.11235pt.
- [47
+ [49
 
 
 
 
  <./Graphics/gantt_chart.png>])
-(./section/7_project_budget.tex [48
+(./section/7_project_budget.tex [50
 
 ])
-<./Graphics/sensor_nodes.png, id=817, 364.9635pt x 275.8305pt>
+<./Graphics/sensor_nodes.png, id=845, 364.9635pt x 275.8305pt>
 File: ./Graphics/sensor_nodes.png Graphic file (type png)
 <use ./Graphics/sensor_nodes.png>
 Package pdftex.def Info: ./Graphics/sensor_nodes.png  used on input line 38.
 (pdftex.def)             Requested size: 312.62466pt x 236.28786pt.
-) [49
+) [51
 
  <./Graphics/sensor_nodes.png>]
-(./main.bbl [50
+(./main.bbl [52
 
 
 
-]) [51] (./main.aux (./section/Declaration.aux)
+]) [53] (./main.aux (./section/Declaration.aux)
 (./section/Certificate_of_Approval.aux) (./section/Copyright.aux)
 (./section/acknowledgement.aux) (./section/abstract.aux) (./section/lists.aux)
 (./section/introduction.aux) (./section/literaturereview.aux)
@@ -1024,13 +1038,13 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B9DCC4C53BAE05DA8CF443FEFDEED9FF;12272.
+(rerunfilecheck)             Checksum: E88A29A38396181EAF194A624D22B8D4;12418.
  ) 
 Here is how much of TeX's memory you used:
- 14662 strings out of 476106
- 242764 string characters out of 5793933
+ 14680 strings out of 476106
+ 243237 string characters out of 5793933
  1936975 words of memory out of 5000000
- 36123 multiletter control sequences out of 15000+600000
+ 36136 multiletter control sequences out of 15000+600000
  581163 words of font info for 82 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  75i,10n,79p,1637b,591s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1043,10 +1057,10 @@ t/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (63 pages, 2198261 bytes).
+Output written on main.pdf (65 pages, 2357661 bytes).
 PDF statistics:
- 921 PDF objects out of 1000 (max. 8388607)
- 772 compressed objects within 8 object streams
- 190 named destinations out of 1000 (max. 500000)
- 623 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 948 PDF objects out of 1000 (max. 8388607)
+ 794 compressed objects within 8 object streams
+ 195 named destinations out of 1000 (max. 500000)
+ 636 words of extra memory for PDF output out of 10000 (max. 10000000)
 
